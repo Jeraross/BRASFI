@@ -1,12 +1,6 @@
 ## Descrição
 
-Este projeto foi criado como parte da disciplina de Projetos 2 na CESAR School - turma 2024.2.
- 
-## Tecnologias
-
-- **Framework de Desenvolvimento**:
-- **Interface**: 
-- **Banco de dados**: 
+Este projeto foi criado como parte da disciplina de Projetos 3 na CESAR School - turma 2024.2.
 
 ## Ferramentas
 
