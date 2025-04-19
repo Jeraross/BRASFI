@@ -1,0 +1,43 @@
+{% extends "layoutForm.html" %}
+
+{% load static %}
+
+{% block title %}
+    Log in | BRASFI
+{% endblock %}
+
+{% block script %}
+    <script type"text/javascript" src="{% static 'scripts/signin.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="user-box">
+        <div>
+            <center>
+                <img src="{% static 'img/BRASFI_nobg.png' %}" height="30em" style="margin-bottom: 2vh;">
+                <h3>Entre na BRASFI</h3><br>
+            </center>
+        </div>
+    
+        <form action="{% url 'App_BRASFI:login' %}" method="post" id="signin-form" style="width: 100%;margin-bottom: 5vh;">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control inp usrnm" type="text" name="username" placeholder="Username" autocomplete="off" autofocus>
+            </div>
+            <div class="form-group">
+                <input class="form-control inp pswd" type="password" name="password" placeholder="Senha" autocomplete="off">
+                <span class="star"><small>{{message}}</small></span>
+            </div>
+            <center>
+                <input class="btn btn-primary" type="submit" value="Log in" style="margin-top: 10px; width: 95%;" disabled>
+            </center>
+        </form>
+    
+        <div>
+            <center>
+                Não tem uma conta?&nbsp;&nbsp;<a href="{% url 'App_BRASFI:register' %}">Registre aqui</a>
+            </center>
+        </div>
+    </div>
+
+{% endblock %}

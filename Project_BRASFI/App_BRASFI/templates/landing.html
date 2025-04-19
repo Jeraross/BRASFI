@@ -12,13 +12,13 @@
     <header id="header">
         <div class="container">
             <nav>
-                <a href="{% url 'App_BRASFI:Landing' %}">
+                <a href="{% url 'App_BRASFI:landing' %}">
                     <img id="logo"
-     src="{% static 'img/392a7917-3e9e-4ed6-bb0b-af1777a880f0.png' %}"
-     data-original="{% static 'img/392a7917-3e9e-4ed6-bb0b-af1777a880f0.png' %}"
-     data-scrolled="{% static 'img/BRASFI_nobg.png' %}"
-     alt="Logo da BRASFI"
-     width="170">
+                    src="{% static 'img/392a7917-3e9e-4ed6-bb0b-af1777a880f0.png' %}"
+                    data-original="{% static 'img/392a7917-3e9e-4ed6-bb0b-af1777a880f0.png' %}"
+                    data-scrolled="{% static 'img/BRASFI_nobg.png' %}"
+                    alt="Logo da BRASFI"
+                    width="170">
                 </a>
                 <ul class="ul">
                     <li><a href="#abrasfi">A BRASFI</a></li>
@@ -26,7 +26,7 @@
                     <li><a href="#impac">NOSSO IMPACTO</a></li>
                     <li><a href="#faca">FAÇA PARTE</a></li>
                 </ul>
-                <button class="button-59" role="button">ACADEMY</button>
+                <button class="button-59" role="button" onclick="goto_login()">ACADEMY</button>
             </nav>
         </div>
     </header>
@@ -36,9 +36,10 @@
         <video id="slider" loop muted autoplay>
             <source src="{% static 'video/vid1.mp4' %}" type="video/mp4">
         </video>
+        
         <ul class="navigation-slider">
             <li>
-                <button onclick="videoUrl('{% static 'video/vid1.mp4' %}')" class="button-33" role="button">BRASFI</button>
+                <button onclick="videoUrl('{% static 'video/vid1.mp4' %}')" class="button-33" role="button">BRASFI</button> 
             </li>
             <li>
                 <button onclick="videoUrl('{% static 'video/vid2.mp4' %}')" class="button-33" role="button">EVENTOS</button>
