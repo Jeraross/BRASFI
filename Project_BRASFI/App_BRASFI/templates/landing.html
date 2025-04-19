@@ -1,11 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>BRASFI</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/landing.css' %}">
 </head>
 <body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="{% url 'App_BRASFI:Landing' %}">
+                    <img id="logo"
+     src="{% static 'img/392a7917-3e9e-4ed6-bb0b-af1777a880f0.png' %}"
+     data-original="{% static 'img/392a7917-3e9e-4ed6-bb0b-af1777a880f0.png' %}"
+     data-scrolled="{% static 'img/BRASFI_nobg.png' %}"
+     alt="Logo da BRASFI"
+     width="170">
+                </a>
+                <ul class="ul">
+                    <li><a href="#abrasfi">A BRASFI</a></li>
+                    <li><a href="#atua">COMO ATUAMOS</a></li>
+                    <li><a href="#impac">NOSSO IMPACTO</a></li>
+                    <li><a href="#faca">FAÇA PARTE</a></li>
+                </ul>
+                <button class="button-59" role="button">ACADEMY</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <section class="video-slider">
+        <video id="slider" loop muted autoplay>
+            <source src="{% static 'video/vid1.mp4' %}" type="video/mp4">
+        </video>
+        <ul class="navigation-slider">
+            <li>
+                <button onclick="videoUrl('{% static 'video/vid1.mp4' %}')" class="button-33" role="button">BRASFI</button>
+            </li>
+            <li>
+                <button onclick="videoUrl('{% static 'video/vid2.mp4' %}')" class="button-33" role="button">EVENTOS</button>
+            </li>
+            <li>
+                <button onclick="videoUrl('{% static 'video/57936-486852886_medium.mp4' %}')" class="button-33" role="button">ECOLOGIA</button>
+            </li>
+        </ul>
+    </section>
     
+    <section id="abrasfi" class="BRASFI">
+        <div class="container">
+            <div class="BRASFI-txt">
+                <h2>CONHEÇA<br>A BRASFI</h2>
+                <p>A BRASFI é uma comunidade multidisciplinar que promove a sustentabilidade no setor financeiro brasileiro, formando líderes e impulsionando ações de impacto positivo. Transformando empresas, pessoas e nosso planeta.</p>
+                <button class="button-33" role="button">SAIBA MAIS</button>
+            </div>
+            <div class="BRASFI-img">
+                <img src="{% static 'img/twg_dinheiro_brasileiros_thumb.png' %}" alt="Logo da BRASFI" width="750">
+            </div>
+        </div>
+    </section>
+
+    <section id="atua" class="BRASFI">
+        <div class="container">
+            <div class="BRASFI-img">
+                <img src="{% static 'img/twg_br_esg_google_for_brasil_graphic_01.png' %}" alt="Logo da BRASFI" width="600">
+            </div>
+            <div class="BRASFI-txt">
+                <h2>COMO ATUAMOS</h2>
+                <p>Atuamos como catalisadora no desenvolvimento de lideranças e soluções em finanças e investimentos sustentáveis. Buscamos inspirar e capacitar uma nova geração de líderes que impulsionem mudanças positivas.</p>
+                <button class="button-33" role="button">SAIBA MAIS</button>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .card[for="c1"] {
+            background-image: url("{% static 'img/alocacao-profissionais-ti-1024x576.jpg' %}");
+        }
+        .card[for="c2"] {
+            background-image: url("{% static 'img/formacao-academica.png' %}");
+        }
+        .card[for="c3"] {
+            background-image: url("{% static 'img/whatsapp-image-2023-09-18-at-080418.jpeg' %}");
+        }
+        .card[for="c4"] {
+            background-image: url("{% static 'img/o-que-e-workshop-quais-vantagens-desvantagens-dos.webp' %}");
+        }
+    </style>
+    
+    <section id="impac" class="impacto">
+        <h2>NOSSO IMPACTO</h2>
+        <p id="impacto-txt">Conheça os números que comprovam o impacto da BRASFI na sociedade.</p>
+        <div class="wrapper">
+            <div class="container-impacto">
+                <input type="radio" name="slide" id="c1" checked>
+                <label for="c1" class="card">
+                    <div class="row">
+                        <div class="icon">+20</div>
+                        <div class="description">
+                            <h4>Alocação Profissional</h4>
+                            <p>Jovens profissionais alocados no mercado de trabalho.</p>
+                        </div>
+                    </div>
+                </label>
+                <input type="radio" name="slide" id="c2">
+                <label for="c2" class="card">
+                    <div class="row">
+                        <div class="icon">+20</div>
+                        <div class="description">
+                            <h4>Formação</h4>
+                            <p>Bolsas de estudo.</p>
+                        </div>
+                    </div>
+                </label>
+                <input type="radio" name="slide" id="c3">
+                <label for="c3" class="card">
+                    <div class="row">
+                        <div class="icon">+40</div>
+                        <div class="description">
+                            <h4>Eventos de impacto</h4>
+                            <p>ESG e temas sobre sustentabilidade.</p>
+                        </div>
+                    </div>
+                </label>
+                <input type="radio" name="slide" id="c4">
+                <label for="c4" class="card">
+                    <div class="row">
+                        <div class="icon">+50</div>
+                        <div class="description">
+                            <h4>Curso & Workshops</h4>
+                            <p>Treinamentos realizados.</p>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </section>
+
+    <section class="patrocinios" style="padding-top: 0px;">
+        <div class="container">
+            <p id="patrocinios-txt">Conheça nossos parceiros e aliados nessa jornada!</p>
+            <div class="slider" reverse="true" style="
+                --width: 200px;
+                --height: 200px;
+                --quantity: 9;
+            ">
+                <div class="list">
+                    <div class="item" style="--position: 1"><img src="{% static 'images/slider2_1.png' %}" alt=""></div>
+                    <div class="item" style="--position: 2"><img src="{% static 'images/slider2_2.png' %}" alt=""></div>
+                    <div class="item" style="--position: 3"><img src="{% static 'images/slider2_3.png' %}" alt=""></div>
+                    <div class="item" style="--position: 4"><img src="{% static 'images/slider2_4.png' %}" alt=""></div>
+                    <div class="item" style="--position: 5"><img src="{% static 'images/slider2_5.png' %}" alt=""></div>
+                    <div class="item" style="--position: 6"><img src="{% static 'images/slider2_6.png' %}" alt=""></div>
+                    <div class="item" style="--position: 7"><img src="{% static 'images/slider2_7.png' %}" alt=""></div>
+                    <div class="item" style="--position: 8"><img src="{% static 'images/slider2_8.png' %}" alt=""></div>
+                    <div class="item" style="--position: 9"><img src="{% static 'images/slider2_9.png' %}" alt=""></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faca" class="FAÇAPARTE" style="padding: 205px 0;">
+        <div class="container">
+            <div class="parte-txt">
+                <h2>QUER FAZER PARTE?</h2>
+            </div>
+            <div class="parte-btn">
+                <button class="button-34" role="button">CLIQUE AQUI</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="{% static 'img/BRASFI_nobg.png' %}" alt="Logo da BRASFI" width="150">
+            </div>
+            
+            <div class="footer-info">
+                <p>&copy; 2024 BRASFI - Todos os direitos reservados.</p>
+            </div>
+
+            <div class="footer-social">
+                <a href="https://www.linkedin.com" target="_blank"><img src="{% static 'img/linkedin.png' %}" alt="LinkedIn"></a>
+                <a href="https://www.instagram.com" target="_blank"><img src="{% static 'img/instagram.png' %}" alt="Instagram"></a>
+                <a href="https://www.facebook.com" target="_blank"><img src="{% static 'img/facebook.png' %}" alt="Twitter"></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'scripts/landingScript.js' %}"></script>
 </body>
 </html>
