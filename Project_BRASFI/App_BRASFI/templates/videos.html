@@ -11,30 +11,34 @@
         <button id="popup-btn" class="btn new-post-btn" onclick="createvideo()">Postar Video</button>
     {% endif %}
     {% if videos %}
-        <div class="posts-view">
-            {% for video in videos %}
-            <div class="post-card">
-                <div class="post-card-header">
-                    <div class="post-card-header-left">
-                        <div class="small-profilepic" style="background-image: url('/media/{{ video.user.profilePic }}')"></div>
-                        <div class="user-info">
-                            <div class="username"><strong>{{ video.user.username }}</strong></div>
-                            <div class="user-type grey">{{ video.user.userType }}</div>
-                        </div>
-                        <div class="username-time">
-                            <span class="created-at">{{ video.created_at|date:"d M Y · H:i" }}</span>
-                        </div>
+    <div class="posts-view">
+        {% for video in videos %}
+        <div class="post-card">
+            <!-- Header: Criador e Data -->
+            <div class="post-header">
+                <div class="creator-info">
+                    <div class="small-profilepic-video" style="background-image: url('/media/{{ video.user.profilePic }}');"></div>
+                    <div>
+                        <div class="username">{{ video.user.username }}</div>
+                        <div class="user-type">{{ video.user.userType }}</div>
                     </div>
                 </div>
-
-                <div class="post-video-info">
-                    <h3 class="video-title">{{ video.title }}</h3>
-                    <p class="video-description">{{ video.description }}</p>
-                </div>
-
-                <video controls src="{{ video.video_file.url }}" width="100%" height="auto"></video>
+                <div class="created-at">{{ video.created_at|date:"d M Y · H:i" }}</div>
             </div>
-            {% endfor %}
+    
+            <!-- Vídeo -->
+            <video controls class="video-player" src="{{ video.video_file.url }}"></video>
+    
+            <!-- Título e Descrição -->
+            <div class="video-details">
+                <h3 class="video-title">{{ video.title }}</h3>
+                <p class="video-description">{{ video.description }}</p>
+            </div>
         </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% if not videos %}
+        <div class="no-videos">Nenhum vídeo encontrado.</div>
     {% endif %}
 {% endblock %}
