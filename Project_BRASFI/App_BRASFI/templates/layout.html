@@ -6,10 +6,41 @@
         <title>{% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'styles/hub.css' %}" rel="stylesheet">
-        {% block head %}    
-        {% endblock %}
+        <script type="text/javascript" src="{% static 'scripts/hub.js' %}"></script>
     </head> 
     <body>
+
+        <div class="popup">
+            <div class="large-popup">
+                <div>
+                    <div class="form-area">
+                        <form action="{% url 'App_BRASFI:createvideo' %}" method="POST" class="newpost" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            <input type="text" name="title" placeholder="Título do vídeo" class="form-control" required>
+                            
+                            <textarea name="description" rows="4" placeholder="Descrição do vídeo..." class="form-control" id="video-description" required></textarea>
+
+                            <div id="video-preview-div" style="margin-top: 10px; display: none;">
+                                <video id="video-preview" width="100%" height="auto" controls></video>
+                            </div>
+
+                            <input name="video_file" accept="video/mp4,video/mov,video/webm,video/ogg" type="file" style="display: none;" id="video-upload" required>
+                            <label for="video-upload" class="icon-btn form-icon-btn">
+                                <span style="font-size: 0.95em;">Selecionar vídeo</span>
+                            </label>
+
+                            <hr>
+                            <div class="form-action-btns">
+                                <input type="submit" class="btn btn-success float-right submit-btn" value="Enviar" disabled>
+                                <button onclick="closeCreatePostPopup()" class="icon-btn" style="float: right;">X</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="body" data-page="{{page}}">
             <div class="sidenav">
                 <a href="{% url 'App_BRASFI:landing' %}" class="navbar-brand">

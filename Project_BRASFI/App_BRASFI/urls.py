@@ -13,6 +13,7 @@ urlpatterns = [
     path('projecthub', views.ProjectHubView, name='projecthub'),
     path('networkhub', views.NetworkHubView, name='networkhub'), 
     path('videos', views.VideosView, name='videos'),
+    path('videos/create/', views.CreateVideoView, name="createvideo"),
     path('quizzes', views.QuizzesView, name='quizzes'),
     path('curadoria', views.CuradoriaView, name='curadoria'),
 ]

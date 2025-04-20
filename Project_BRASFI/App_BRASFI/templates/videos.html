@@ -8,6 +8,35 @@
 
 {% block body %}
     {% if user.userType == "mentor" %}
-        <button id="popup-btn" class="btn new-post-btn" onclick="">Postar Video</button>
+        <button id="popup-btn" class="btn new-post-btn" onclick="createvideo()">Postar Video</button>
+    {% endif %}
+    {% if videos %}
+        <div class="posts-view">
+            {% for video in videos %}
+            <div class="post-card">
+                <div class="post-card-header">
+                    <div class="post-card-header-left">
+                        <div class="small-profilepic" style="background-image: url('/media/{{ video.user.profilePic }}')"></div>
+                        <div class="user-info">
+                            <div class="username"><strong>{{ video.user.username }}</strong></div>
+                            <div class="user-type grey">{{ video.user.userType }}</div>
+                        </div>
+                        <div class="username-time">
+                            <span class="created-at">{{ video.created_at|date:"d M Y · H:i" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-video-info">
+                    <h3 class="video-title">{{ video.title }}</h3>
+                    <p class="video-description">{{ video.description }}</p>
+                </div>
+
+                <video controls src="{{ video.video_file.url }}" width="100%" height="auto"></video>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Nenhum vídeo encontrado.</p>
     {% endif %}
 {% endblock %}

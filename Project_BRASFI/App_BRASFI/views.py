@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .models import User
+from .models import User, Video
 
 def LandingView(request):
     return render(request, 'landing.html')
@@ -88,9 +88,35 @@ def NetworkHubView(request):
 
 @login_required
 def VideosView(request):
+    all_videos = Video.objects.all().order_by('-created_at')
     return render(request, "videos.html", {
-        "page": "videos"
+        "page": "videos",
+        "videos": all_videos,
     })
+
+def CreateVideoView(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        video_file = request.FILES.get("video_file")
+
+        if title and description and video_file:
+            try:
+                with transaction.atomic():
+                    video = Video.objects.create(
+                        title=title,
+                        description=description,
+                        video_file=video_file,
+                        user=request.user
+                    )
+                    video.save()
+                messages.success(request, "Vídeo criado com sucesso!")
+                return HttpResponseRedirect(reverse('App_BRASFI:videos'))
+            except IntegrityError:
+                messages.error(request, "Erro ao criar o vídeo.")
+                return HttpResponseRedirect(reverse('App_BRASFI:videos'))
+    else:
+        return HttpResponse("Method must be 'POST'")
 
 @login_required
 def QuizzesView(request):
