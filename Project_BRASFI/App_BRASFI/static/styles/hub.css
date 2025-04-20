@@ -529,6 +529,7 @@
     cursor: pointer;
     transition: color 0.2s ease;
 }
+
 .popup-close-btn:hover {
     color: #ff5c5c;
 }
@@ -544,6 +545,7 @@
     background-color: #f8f8f8;
     transition: border 0.3s ease;
 }
+
 .modern-input:focus {
     border-color: #28a745;
     outline: none;
@@ -553,6 +555,7 @@
 .video-preview-wrapper {
     margin-top: 20px;
 }
+
 .video-preview {
     width: 100%;
     border-radius: 12px;
@@ -561,6 +564,7 @@
 
 .modern-upload-btn {
     display: inline-block;
+    width: 100%;
     background-color: #e6f4ea;
     border: 2px dashed #28a745;
     color: #28a745;

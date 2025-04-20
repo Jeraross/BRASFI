@@ -1,7 +1,7 @@
 function createvideo() {
     const popup = document.querySelector(".popup");
     popup.style.display = 'block';
-    popup.querySelector('.large-popup').style.display = 'block';
+    popup.querySelector('.popup-create-post').style.display = 'block';
 
     document.querySelector('.body').setAttribute('aria-hidden', 'true');
     document.querySelector('body').style.overflow = "hidden";

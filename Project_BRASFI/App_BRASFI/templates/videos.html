@@ -39,7 +39,7 @@
             {% if user == video.user %}
             <form method="POST" action="{% url 'App_BRASFI:delete_video' video.id %}" onsubmit="return confirm('Você realmente deseja excluir este vídeo?');">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Excluir</button>
+                <button type="submit" style="width: 100%;" class="btn btn-danger">Excluir</button>
             </form>
             {% endif %}
         </div>
@@ -48,7 +48,7 @@
     {% endif %}
     {% if not videos %}
     <div class="posts-view">
-        <div class="no-videos">Nenhum vídeo encontrado.</div>
+        <div>Nenhum vídeo encontrado.</div>
     </div>
     {% endif %}
 {% endblock %}
