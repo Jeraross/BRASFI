@@ -14,26 +14,29 @@
             <div class="large-popup">
                 <div>
                     <div class="form-area">
+                        <div class="popup-header">
+                            <h2 class="popup-title">Novo Vídeo</h2>
+                            <button onclick="closeCreatePostPopup()" class="popup-close-btn">✕</button>
+                        </div>
                         <form action="{% url 'App_BRASFI:createvideo' %}" method="POST" class="newpost" enctype="multipart/form-data">
                             {% csrf_token %}
                             
-                            <input type="text" name="title" placeholder="Título do vídeo" class="form-control" required>
+                            <input type="text" name="title" placeholder="Título do vídeo" class="form-control modern-input" required>
                             
-                            <textarea name="description" rows="4" placeholder="Descrição do vídeo..." class="form-control" id="video-description" required></textarea>
+                            <textarea name="description" rows="4" placeholder="Descrição do vídeo..." class="form-control modern-input" id="video-description" required></textarea>
 
                             <div id="video-preview-div" style="margin-top: 10px; display: none;">
                                 <video id="video-preview" width="100%" height="auto" controls></video>
                             </div>
 
                             <input name="video_file" accept="video/mp4,video/mov,video/webm,video/ogg" type="file" style="display: none;" id="video-upload" required>
-                            <label for="video-upload" class="icon-btn form-icon-btn">
+                            <label for="video-upload" class="modern-upload-btn">
                                 <span style="font-size: 0.95em;">Selecionar vídeo</span>
                             </label>
 
                             <hr>
                             <div class="form-action-btns">
                                 <input type="submit" class="btn btn-success float-right submit-btn" value="Enviar" disabled>
-                                <button onclick="closeCreatePostPopup()" class="icon-btn" style="float: right;">X</button>
                             </div>
                         </form>
                     </div>
