@@ -76,20 +76,30 @@ def RegisterView(request):
 
 @login_required
 def ProjectHubView(request):
-    return render(request, "projecthub.html")
+    return render(request, "projecthub.html", {
+        "page": "projecthub"
+    })
 
 @login_required
 def NetworkHubView(request):
-    return render(request, "networkhub.html")
+    return render(request, "networkhub.html", {
+        "page": "networkhub"
+    })
 
 @login_required
 def VideosView(request):
-    return render(request, "videos.html")
+    return render(request, "videos.html", {
+        "page": "videos"
+    })
 
 @login_required
 def QuizzesView(request):
-    return render(request, "quizzes.html")
+    return render(request, "quizzes.html", {
+        "page": "quizzes"
+    })
 
 @login_required
 def CuradoriaView(request):
-    return render(request, "curadoria.html")
+    return render(request, "curadoria.html", {
+        "page": "curadoria"
+    })

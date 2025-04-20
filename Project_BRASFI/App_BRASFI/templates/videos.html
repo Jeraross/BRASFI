@@ -5,3 +5,9 @@
 {% block title %}
     Videos | BRASFI
 {% endblock %}
+
+{% block body %}
+    {% if user.userType == "mentor" %}
+        <button id="popup-btn" class="btn new-post-btn" onclick="">Postar Video</button>
+    {% endif %}
+{% endblock %}

@@ -5,3 +5,9 @@
 {% block title %}
     Hub de Projetos | BRASFI
 {% endblock %}
+
+{% block body %}
+    {% if user.userType == "aprendiz" %}
+        <button id="popup-btn" class="btn new-post-btn" onclick="">Criar Projeto</button>
+    {% endif %}
+{% endblock %}
