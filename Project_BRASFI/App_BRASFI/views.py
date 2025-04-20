@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views import View
-from django.conf import settings
+from django.db.models import Count
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from random import sample
 from .models import User, Video
+
 
 def LandingView(request):
     return render(request, 'landing.html')
@@ -89,9 +90,20 @@ def NetworkHubView(request):
 @login_required
 def VideosView(request):
     all_videos = Video.objects.all().order_by('-created_at')
+
+    # Top mentores baseados no número de vídeos
+    top_mentors_raw = User.objects.filter(userType="mentor")\
+        .annotate(total_videos=Count('videos'))\
+        .order_by('-total_videos')[:5]
+
+    # Vídeos recomendados (3 aleatórios)
+    recommended_videos = sample(list(all_videos), 3) if all_videos.count() >= 3 else all_videos
+
     return render(request, "videos.html", {
         "page": "videos",
         "videos": all_videos,
+        'top_mentors': top_mentors_raw,
+        'recommended_videos': recommended_videos,
     })
 
 def CreateVideoView(request):

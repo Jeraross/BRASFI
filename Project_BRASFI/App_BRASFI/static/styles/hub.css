@@ -24,7 +24,7 @@
 /* --------------------- */
 .new-post-btn {
     width: 90%;
-    margin: 0.25% auto 0 auto;
+    margin: 0 auto 0 auto;
     background-color: #c2fbd7;
     border-radius: 100px;
     box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,
@@ -274,7 +274,7 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
-    padding: 50px 8%;
+    padding: 40px 5% 20px 5%;
     max-width: 1100px;
     margin: auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -354,6 +354,123 @@
     line-height: 1.75;
     white-space: pre-line;
     margin: 0;
+}
+
+/* --------------------- */
+/* RECOMENDADOS E MENTORES */  
+/* --------------------- */
+.right-div-content h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e6ecf0;
+}
+
+.top-mentors, .recommended-videos {
+    margin-top: 30px;
+}
+
+.mentor-list, .recommended-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* MENTORES */
+.mentor-item {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    transition: background-color 0.3s ease;
+}
+
+.mentor-item:hover {
+    background-color: #f0fff7;
+}
+
+.mentor-pic {
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    margin-right: 12px;
+    border: 2px solid #28a74533;
+}
+
+.mentor-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.mentor-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #14171a;
+}
+
+.mentor-meta {
+    font-size: 0.8rem;
+    color: #777;
+}
+
+/* RECOMENDADOS */
+.recommended-item {
+    display: flex;
+    background-color: #fefefe;
+    padding: 10px 14px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.recommended-item:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    background-color: #f4fff8;
+}
+
+.rec-mini-player {
+    width: 100px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid #28a74522;
+    transition: all 0.3s ease;
+}
+
+.recommended-item:hover .rec-mini-player {
+    border-color: #28a74588;
+}
+
+.rec-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.rec-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rec-author {
+    font-size: 0.8rem;
+    color: #657786;
 }
 
 /* --------------------- */
