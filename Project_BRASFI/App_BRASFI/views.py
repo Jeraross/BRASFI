@@ -118,6 +118,21 @@ def CreateVideoView(request):
     else:
         return HttpResponse("Method must be 'POST'")
 
+
+@login_required
+def DeleteVideoView(request, video_id):
+    video = get_object_or_404(Video, id=video_id)
+
+    # Verifica se o usuário que está tentando excluir é o dono do vídeo
+    if video.user == request.user:
+        video.delete()
+        messages.success(request, "Vídeo excluído com sucesso!")
+    else:
+        messages.error(request, "Você não tem permissão para excluir este vídeo.")
+
+    return redirect('App_BRASFI:videos')
+
+
 @login_required
 def QuizzesView(request):
     return render(request, "quizzes.html", {
@@ -129,3 +144,4 @@ def CuradoriaView(request):
     return render(request, "curadoria.html", {
         "page": "curadoria"
     })
+

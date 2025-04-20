@@ -25,15 +25,23 @@
                 </div>
                 <div class="created-at">{{ video.created_at|date:"d M Y · H:i" }}</div>
             </div>
-    
+
             <!-- Vídeo -->
             <video controls class="video-player" src="{{ video.video_file.url }}"></video>
-    
+
             <!-- Título e Descrição -->
             <div class="video-details">
                 <h3 class="video-title">{{ video.title }}</h3>
                 <p class="video-description">{{ video.description }}</p>
             </div>
+
+            <!-- Botão de deletar (só aparece pro dono do vídeo) -->
+            {% if user == video.user %}
+            <form method="POST" action="{% url 'App_BRASFI:delete_video' video.id %}" style="margin-top: 10px;" onsubmit="return confirm('Você realmente deseja excluir este vídeo?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Excluir</button>
+            </form>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
