@@ -9,7 +9,7 @@ class User(AbstractUser):
         ('aprendiz', 'Aprendiz'),
     )
 
-    profilePic = models.ImageField(upload_to='profile_pic/')
+    profilePic = models.ImageField(upload_to='profile_pic/', blank=True, null=True)
     userType = models.CharField(max_length=10, choices=TIPO_USUARIO, default='aprendiz')
 
     def __str__(self):
@@ -19,6 +19,6 @@ class User(AbstractUser):
         return {
             'id': self.id,
             "username": self.username,
-            "profilePic": self.profile_pic.url,
+            "profilePic": self.profilePic.url if self.profilePic else None,
             "userType": self.userType,
         }

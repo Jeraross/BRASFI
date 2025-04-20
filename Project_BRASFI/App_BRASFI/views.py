@@ -23,7 +23,7 @@ def LoginView(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("App_BRASFI:projecthub"))
         else:
             return render(request, "login.html", {
                 "message": "Senha ou usuário inválido."
@@ -34,17 +34,16 @@ def LoginView(request):
 
 def LogoutView(request):
     logout(request)
-    return HttpResponseRedirect(reverse("LandingView"))
+    return HttpResponseRedirect(reverse("App_BRASFI:landing"))
 
-def Register(request):
+def RegisterView(request):
     if request.method == "POST":
-        username = request.POST["username"]
-        email = request.POST["email"]
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        confirmation = request.POST.get("confirmation")
+        tipo = request.POST.get("tipo")
         profile = request.FILES.get("profile")
-        tipo = request.POST["tipo"]
-
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
 
         if password != confirmation:
             return render(request, "register.html", {
@@ -52,9 +51,15 @@ def Register(request):
             })
 
         try:
-            user = User.objects.create_user(username, email, password)
-            user.profilePic = profile
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
             user.userType = tipo
+
+            if profile:
+                user.profilePic = profile
 
             user.save()
 
@@ -62,8 +67,29 @@ def Register(request):
             return render(request, "register.html", {
                 "message": "Usuário já existe."
             })
-        
+
         login(request, user)
-        return HttpResponseRedirect(reverse("LoginView"))
-    else:
-        return render(request, "register.html")
+        return HttpResponseRedirect(reverse("App_BRASFI:projecthub"))
+
+    return render(request, "register.html")
+
+
+@login_required
+def ProjectHubView(request):
+    return render(request, "projecthub.html")
+
+@login_required
+def NetworkHubView(request):
+    return render(request, "networkhub.html")
+
+@login_required
+def VideosView(request):
+    return render(request, "videos.html")
+
+@login_required
+def QuizzesView(request):
+    return render(request, "quizzes.html")
+
+@login_required
+def CuradoriaView(request):
+    return render(request, "curadoria.html")

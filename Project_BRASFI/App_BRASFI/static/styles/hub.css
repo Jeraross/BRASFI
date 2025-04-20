@@ -1,0 +1,279 @@
+/* --------------------- */
+/* FONTES E TIPOGRAFIA   */
+/* --------------------- */
+.body {
+    display: flex;
+    min-height: 100%;
+    font-family: Inter, sans-serif;
+}
+
+.username {
+    font-weight: 600;
+    color: #14171a;
+    font-size: 0.95rem;
+    line-height: 1.2em;
+}
+
+.user-type,
+.grey {
+    font-size: 0.8rem;
+    color: #657786;
+}
+
+/* --------------------- */
+/* BOTÕES                */
+/* --------------------- */
+.btn {
+    border-radius: 20px;
+    padding: 0.32rem 1rem 0.375rem 1rem;
+}
+
+.btn,
+.btn:focus,
+.btn:active {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+
+.btn:disabled {
+    cursor: default;
+}
+
+.icon-btn {
+    background: none;
+    border-color: transparent;
+    color: #28a745;
+    line-height: .82em;
+    padding: 4px;
+    margin: 0;
+    border-radius: 999px;
+    width: max-content;
+}
+
+.icon-btn:hover {
+    background-color: rgba(40, 167, 69, .1);
+    transition-duration: .35s;
+    cursor: pointer;
+}
+
+.icon-btn:active {
+    background-color: rgba(40, 167, 69, .23);
+    transition-duration: .35s;
+}
+
+.icon-btn:focus {
+    outline: none;
+}
+
+/* --------------------- */
+/* SIDEBAR BASE          */
+/* --------------------- */
+.sidenav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: 100%;
+    background-color: #ffffff;
+    padding: 20px 1.5% 0 1.5%;
+    border-right: 1px solid #e6ecf0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --------------------- */
+/* MENU ITEMS            */
+/* --------------------- */
+.sidenav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 3vh 0;
+}
+
+.sidenav-menu .nav-item {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.sidenav-menu .nav-link {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: #212529;
+    padding: 10px 18px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidenav-menu .nav-link > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.sidenav-menu .nav-link::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 4px;
+    background-color: #28a745;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    transition: 0.3s ease;
+    border-radius: 0 5px 5px 0;
+}
+
+.sidenav-menu .nav-item.active .nav-link {
+    background-color: #e6fff0;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    color: #28a745;
+    font-weight: 700;
+}
+
+.sidenav-menu .nav-item.active .nav-link::before {
+    opacity: 1;
+}
+
+.sidenav-menu .nav-link:hover {
+    background-color: #e7f8ef;
+    color: #17bf63;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transform: translateX(3px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-5px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* --------------------- */
+/* LOGOUT ITEM           */
+/* --------------------- */
+.sidenav-menu .logout-link {
+    color: #dc3545;
+}
+
+.sidenav-menu .logout-link:hover {
+    background-color: #fbe3e4;
+    color: #c82333;
+}
+
+/* --------------------- */
+/* PERFIL DO USUÁRIO     */
+/* --------------------- */
+.sidenav-user-wrapper {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    padding: 0 15px;
+    backdrop-filter: blur(6px);
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px 20px 0 0;
+}
+
+.user_account {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 999px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.user_account:hover {
+    background-color: #f5f8fa;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.small-profilepic {
+    width: 3.1vw;
+    height: 3.1vw;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-right: 8px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    box-sizing: content-box;
+}
+
+/* --------------------- */
+/* LAYOUT PRINCIPAL      */
+/* --------------------- */
+.main-div {
+    position: relative;
+    width: 47.25%;
+    min-height: 100vh;
+    left: 21.8%;
+}
+
+.left-div {
+    position: relative;
+}
+
+.left-div-content {
+    margin-top: 7.5vh;
+}
+
+.head {
+    height: 7.5vh;
+}
+
+.heading {
+    position: fixed;
+    width: 47.255%;
+    top: 0;
+    padding: 18px;
+    background-color: #fff;
+    border-bottom: .5px solid #e6ecf0;
+    font-weight: 800;
+    line-height: .7em;
+    z-index: 1000;
+}
+
+.right-div {
+    width: 28%;
+    height: 100vh;
+    position: fixed;
+    right: 2.95%;
+    background-color: white;
+    border-left: .5px solid #e6ecf0;
+}
+
+.right-div-content {
+    height: 92.5vh;
+    overflow: auto;
+    padding-left: 1.5vw;
+    padding-right: 1.5vw;
+}
+
+/* --------------------- */
+/* SCROLLBAR ESTILIZADO  */
+/* --------------------- */
+
+::-webkit-scrollbar {
+    width: 5px; /* Largura da barra de rolagem */
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3); /* Cor da "bolinha" do scroll */
+    transition: background 0.3s ease; /* Transição suave para mudar a cor */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5); /* Cor quando o scroll está sendo usado */
+}

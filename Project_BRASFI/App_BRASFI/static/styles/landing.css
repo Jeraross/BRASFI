@@ -6,20 +6,6 @@
     font-family: Inter,sans-serif;
 }
 
-/* Estilo do scrollbar */
-::-webkit-scrollbar {
-    width: 5px; /* Largura da barra de rolagem */
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.3); /* Cor da "bolinha" do scroll */
-    transition: background 0.3s ease; /* Transição suave para mudar a cor */
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.5); /* Cor quando o scroll está sendo usado */
-}
-
 .container{
     max-width: 1400px;
     margin: 0 auto;
@@ -508,4 +494,18 @@ footer {
 .fade-in.show {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Estilo do scrollbar */
+::-webkit-scrollbar {
+    width: 5px; /* Largura da barra de rolagem */
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3); /* Cor da "bolinha" do scroll */
+    transition: background 0.3s ease; /* Transição suave para mudar a cor */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5); /* Cor quando o scroll está sendo usado */
 }

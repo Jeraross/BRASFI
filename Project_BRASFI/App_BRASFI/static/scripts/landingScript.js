@@ -56,5 +56,5 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 function goto_login() {
-    window.location.href = '/n/login';
+    window.location.href = 'login';
 }

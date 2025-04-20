@@ -7,9 +7,14 @@ app_name = 'App_BRASFI'
 
 urlpatterns = [
     path('', views.LandingView, name='landing'), 
-    path("n/login", views.LoginView, name="login"),
-    path("n/logout", views.LogoutView, name="logout"), 
-    path("n/register", views.Register, name="register"),
+    path("login", views.LoginView, name="login"),
+    path("logout", views.LogoutView, name="logout"), 
+    path("register", views.RegisterView, name="register"),
+    path('projecthub', views.ProjectHubView, name='projecthub'),
+    path('networkhub', views.NetworkHubView, name='networkhub'), 
+    path('videos', views.VideosView, name='videos'),
+    path('quizzes', views.QuizzesView, name='quizzes'),
+    path('curadoria', views.CuradoriaView, name='curadoria'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
