@@ -16,6 +16,8 @@ urlpatterns = [
     path('videos/create/', views.CreateVideoView, name="createvideo"),
     path('video/delete/<int:video_id>/', views.DeleteVideoView, name='delete_video'),
     path('quizzes', views.QuizzesView, name='quizzes'),
+    path('quizzes/create/', views.CreateQuizView, name='create_quiz'),
+    path('quizzes/delete/<int:quiz_id>/', views.DeleteQuizView, name='delete_quiz'), 
     path('curadoria', views.CuradoriaView, name='curadoria'),
 ]
 

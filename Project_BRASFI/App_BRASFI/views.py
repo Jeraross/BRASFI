@@ -3,11 +3,15 @@ from django.db.models import Count
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from random import sample
-from .models import User, Video
+from .models import User, Video, Quiz, Question, Choice 
+from django.http import JsonResponse
+import json
 
 
 def LandingView(request):
@@ -155,5 +159,55 @@ def QuizzesView(request):
 def CuradoriaView(request):
     return render(request, "curadoria.html", {
         "page": "curadoria"
+    })
+
+@login_required
+def CreateQuizView(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        title = data.get('title')
+        description = data.get('description')
+        questions = data.get('questions', [])
+
+        quiz = Quiz.objects.create(
+            title=title,
+            description=description
+        )
+
+        for q in questions:
+            question = Question.objects.create(
+                quiz=quiz,
+                text=q['text']
+            )
+            for choice in q['choices']:
+                Choice.objects.create(
+                    question=question,
+                    text=choice['text'],
+                    is_correct=choice.get('is_correct', False)
+                )
+
+        return JsonResponse({'status': 'ok', 'quiz_id': quiz.id})
+
+    return render(request, "create_quiz.html", {"page": "quizzes"})
+
+@login_required
+@csrf_exempt
+def DeleteQuizView(request, quiz_id):
+    if request.method == 'POST':
+        quiz = get_object_or_404(Quiz, id=quiz_id)
+        # Aqui você pode adicionar verificação: só mentor pode deletar
+        if request.user.userType != 'mentor':
+            return JsonResponse({'error': 'Não autorizado'}, status=403)
+
+        quiz.delete()
+        return JsonResponse({'status': 'ok'})
+
+    return JsonResponse({'error': 'Método não permitido'}, status=405)
+
+def QuizzesView(request):
+    quizzes = Quiz.objects.all().order_by('-id')
+    return render(request, "quizzes.html", {
+        "page": "quizzes",
+        "quizzes": quizzes,
     })
 
