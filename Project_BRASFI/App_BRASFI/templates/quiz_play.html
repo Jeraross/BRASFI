@@ -128,10 +128,25 @@
     }
 
     function showResult() {
-        document.getElementById("quiz-container").style.display = "none";
-        document.getElementById("result").style.display = "block";
-        document.getElementById("correct-count").innerText = correctCount;
-    }
+    document.getElementById("quiz-container").style.display = "none";
+    document.getElementById("result").style.display = "block";
+    document.getElementById("correct-count").innerText = correctCount;
+
+    // 👇 Salvar o resultado no backend
+    fetch('/quizzes/submit/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            quiz_id: Number("{{ quiz.id }}"),  // ✅ Corrigido: tratado como número em JS
+            score: correctCount,
+            total: parsedQuestions.length
+        })
+    });
+}
+
 
     window.onload = () => {
         renderQuestion();

@@ -9,7 +9,7 @@ from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from random import sample
-from .models import User, Video, Quiz, Question, Choice 
+from .models import User, Video, Quiz, Question, Choice, QuizResult
 from django.http import JsonResponse
 import json
 
@@ -152,10 +152,31 @@ def DeleteVideoView(request, video_id):
 @login_required
 def QuizzesView(request):
     quizzes = Quiz.objects.all().order_by('-id')
+    user_results = QuizResult.objects.filter(user=request.user)
+
+    quizzes_with_ranking = []
+
+    for quiz in quizzes:
+        item = {
+            'quiz': quiz,
+            'user_result': None,
+            'ranking': []
+        }
+
+        if request.user.userType == 'aprendiz':
+            item['user_result'] = QuizResult.objects.filter(user=request.user, quiz=quiz).first()
+
+        if request.user.userType == 'mentor':
+            item['ranking'] = quiz.results.order_by('-percentage')
+
+        quizzes_with_ranking.append(item)
+
     return render(request, "quizzes.html", {
         "page": "quizzes",
-        "quizzes": quizzes,
+        "quizzes_with_ranking": quizzes_with_ranking
     })
+
+
 
 @login_required
 def CreateQuizView(request):
@@ -218,6 +239,12 @@ def PlayQuizView(request, quiz_id):
         return redirect('App_BRASFI:quizzes')
 
     quiz = get_object_or_404(Quiz, id=quiz_id)
+
+    # Impede que o aluno responda novamente se já respondeu
+    if QuizResult.objects.filter(user=request.user, quiz=quiz).exists():
+        messages.warning(request, "Você já respondeu este quiz.")
+        return redirect('App_BRASFI:quizzes')
+
     questions_qs = quiz.questions.prefetch_related('choices').all()
 
     questions = []
@@ -241,4 +268,62 @@ def PlayQuizView(request, quiz_id):
 def CuradoriaView(request):
     return render(request, "curadoria.html", {
         "page": "curadoria"
+    })
+
+@login_required
+@csrf_exempt
+def SubmitQuizResultView(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        quiz_id = data.get('quiz_id')
+        score = data.get('score')
+        total = data.get('total')
+
+        quiz = get_object_or_404(Quiz, id=quiz_id)
+        percentage = (score / total) * 100
+
+        QuizResult.objects.update_or_create(
+            quiz=quiz,
+            user=request.user,
+            defaults={
+                'score': score,
+                'total': total,
+                'percentage': percentage
+            }
+        )
+
+        return JsonResponse({'status': 'ok'})
+
+    return JsonResponse({'status': 'error', 'message': 'Método inválido'}, status=400)
+
+@login_required
+def EditQuizView(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id, user=request.user)
+    questions = quiz.questions.prefetch_related('choices').all()
+
+    if request.method == 'POST':
+        quiz.title = request.POST.get("title")
+        quiz.description = request.POST.get("description")
+        quiz.time_per_question = request.POST.get("time_per_question")
+        quiz.save()
+
+        for question in questions:
+            question_text = request.POST.get(f"question_{question.id}")
+            if question_text:
+                question.text = question_text
+                question.save()
+
+            correct_choice_id = request.POST.get(f"correct_{question.id}")
+            for choice in question.choices.all():
+                choice_text = request.POST.get(f"choice_{choice.id}")
+                if choice_text:
+                    choice.text = choice_text
+                    choice.is_correct = str(choice.id) == str(correct_choice_id)
+                    choice.save()
+
+        return redirect("App_BRASFI:quizzes")
+
+    return render(request, "edit_quiz.html", {
+        "quiz": quiz,
+        "questions": questions
     })

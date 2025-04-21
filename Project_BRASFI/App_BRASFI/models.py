@@ -73,3 +73,17 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.text 
+    
+class QuizResult(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='results')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quiz_results')
+    score = models.IntegerField()
+    total = models.IntegerField()
+    percentage = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('quiz', 'user')  # impede refazer o mesmo quiz
+
+    def __str__(self):
+        return f"{self.user.username} - {self.quiz.title}: {self.percentage}%"
