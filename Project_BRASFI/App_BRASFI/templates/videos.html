@@ -17,7 +17,7 @@
             <!-- Header: Criador e Data -->
             <div class="post-header">
                 <div class="creator-info">
-                    <div class="small-profilepic-video" style="background-image: url('/media/{{ video.user.profilePic }}');"></div>
+                    <div class="small-profilepic" style="background-image: url('/media/{{ video.user.profilePic }}');"></div>
                     <div>
                         <div class="username">{{ video.user.username }}</div>
                         <div class="user-type">{{ video.user.userType }}</div>
@@ -30,7 +30,7 @@
             <video controls class="video-player" src="{{ video.video_file.url }}"></video>
 
             <!-- Título e Descrição -->
-            <div class="video-details">
+            <div class="post-details">
                 <h3 class="video-title">{{ video.title }}</h3>
                 <p class="video-description">{{ video.description }}</p>
             </div>

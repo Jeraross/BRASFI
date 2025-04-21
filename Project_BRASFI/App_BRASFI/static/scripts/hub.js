@@ -213,8 +213,9 @@ function deleteQuiz(quizId) {
     }).then(res => {
         if (res.ok) {
             document.querySelector(`li[data-id='${quizId}']`).remove();
+            window.location.reload(); // Recarregar a página para atualizar o conteúdo
         } else {
-            alert("Erro ao tentar remover o quiz.");
+            window.location.reload();
         }
     });
 }
