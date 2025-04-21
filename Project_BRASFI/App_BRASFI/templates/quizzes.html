@@ -65,9 +65,8 @@
             {% endif %}
 
             {% if user.userType == "mentor" %}
-                <a href="{% url 'App_BRASFI:edit_quiz' item.quiz.id %}" class="btn btn-warning">Editar</a>
                 <button class="btn btn-danger" onclick="deleteQuiz('{{ item.quiz.id }}')">Excluir</button>
-            {% elif user.userType == "aprendiz" %}
+            {% elif user.userType == "aprendiz" and not item.has_played %}
                 <a href="{% url 'App_BRASFI:play_quiz' item.quiz.id %}" class="btn btn-primary">Executar</a>
             {% endif %}
 

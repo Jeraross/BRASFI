@@ -149,22 +149,22 @@ def DeleteVideoView(request, video_id):
     return redirect('App_BRASFI:videos')
 
 
-@login_required
 def QuizzesView(request):
     quizzes = Quiz.objects.all().order_by('-id')
-    user_results = QuizResult.objects.filter(user=request.user)
-
     quizzes_with_ranking = []
 
     for quiz in quizzes:
         item = {
             'quiz': quiz,
             'user_result': None,
-            'ranking': []
+            'ranking': [],
+            'has_played': False
         }
 
         if request.user.userType == 'aprendiz':
-            item['user_result'] = QuizResult.objects.filter(user=request.user, quiz=quiz).first()
+            user_result = QuizResult.objects.filter(user=request.user, quiz=quiz).first()
+            item['user_result'] = user_result
+            item['has_played'] = user_result is not None
 
         if request.user.userType == 'mentor':
             item['ranking'] = quiz.results.order_by('-percentage')
@@ -240,11 +240,6 @@ def PlayQuizView(request, quiz_id):
 
     quiz = get_object_or_404(Quiz, id=quiz_id)
 
-    # Impede que o aluno responda novamente se já respondeu
-    if QuizResult.objects.filter(user=request.user, quiz=quiz).exists():
-        messages.warning(request, "Você já respondeu este quiz.")
-        return redirect('App_BRASFI:quizzes')
-
     questions_qs = quiz.questions.prefetch_related('choices').all()
 
     questions = []
@@ -262,12 +257,6 @@ def PlayQuizView(request, quiz_id):
         'quiz': quiz,
         'questions': questions,
         'time_per_question': quiz.time_per_question or 20
-    })
-
-@login_required
-def CuradoriaView(request):
-    return render(request, "curadoria.html", {
-        "page": "curadoria"
     })
 
 @login_required
@@ -297,33 +286,7 @@ def SubmitQuizResultView(request):
     return JsonResponse({'status': 'error', 'message': 'Método inválido'}, status=400)
 
 @login_required
-def EditQuizView(request, quiz_id):
-    quiz = get_object_or_404(Quiz, id=quiz_id, user=request.user)
-    questions = quiz.questions.prefetch_related('choices').all()
-
-    if request.method == 'POST':
-        quiz.title = request.POST.get("title")
-        quiz.description = request.POST.get("description")
-        quiz.time_per_question = request.POST.get("time_per_question")
-        quiz.save()
-
-        for question in questions:
-            question_text = request.POST.get(f"question_{question.id}")
-            if question_text:
-                question.text = question_text
-                question.save()
-
-            correct_choice_id = request.POST.get(f"correct_{question.id}")
-            for choice in question.choices.all():
-                choice_text = request.POST.get(f"choice_{choice.id}")
-                if choice_text:
-                    choice.text = choice_text
-                    choice.is_correct = str(choice.id) == str(correct_choice_id)
-                    choice.save()
-
-        return redirect("App_BRASFI:quizzes")
-
-    return render(request, "edit_quiz.html", {
-        "quiz": quiz,
-        "questions": questions
+def CuradoriaView(request):
+    return render(request, "curadoria.html", {
+        "page": "curadoria"
     })
