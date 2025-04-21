@@ -151,44 +151,56 @@ def DeleteVideoView(request, video_id):
 
 @login_required
 def QuizzesView(request):
+    quizzes = Quiz.objects.all().order_by('-id')
     return render(request, "quizzes.html", {
-        "page": "quizzes"
-    })
-
-@login_required
-def CuradoriaView(request):
-    return render(request, "curadoria.html", {
-        "page": "curadoria"
+        "page": "quizzes",
+        "quizzes": quizzes,
     })
 
 @login_required
 def CreateQuizView(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        title = data.get('title')
-        description = data.get('description')
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+
+        title = data.get('title', '').strip()
+        description = data.get('description', '').strip()
         questions = data.get('questions', [])
 
-        quiz = Quiz.objects.create(
-            title=title,
-            description=description
-        )
+        if not title or not description or not questions:
+            return JsonResponse({'status': 'error', 'message': 'Missing fields'}, status=400)
 
-        for q in questions:
-            question = Question.objects.create(
-                quiz=quiz,
-                text=q['text']
-            )
-            for choice in q['choices']:
-                Choice.objects.create(
-                    question=question,
-                    text=choice['text'],
-                    is_correct=choice.get('is_correct', False)
+        try:
+            with transaction.atomic():
+                quiz = Quiz.objects.create(
+                    title=title,
+                    description=description,
+                    user=request.user  # 🔥 se você tem relação de usuário
                 )
 
-        return JsonResponse({'status': 'ok', 'quiz_id': quiz.id})
+                for q in questions:
+                    q_text = q.get('text', '').strip()
+                    if not q_text:
+                        raise ValueError("Missing question text")
 
-    return render(request, "create_quiz.html", {"page": "quizzes"})
+                    question = Question.objects.create(quiz=quiz, text=q_text)
+
+                    for choice in q.get('choices', []):
+                        Choice.objects.create(
+                            question=question,
+                            text=choice.get('text', '').strip(),
+                            is_correct=choice.get('is_correct', False)
+                        )
+
+            return JsonResponse({'status': 'ok', 'quiz_id': quiz.id})
+            
+
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=405)
 
 @login_required
 @csrf_exempt
@@ -204,10 +216,9 @@ def DeleteQuizView(request, quiz_id):
 
     return JsonResponse({'error': 'Método não permitido'}, status=405)
 
-def QuizzesView(request):
-    quizzes = Quiz.objects.all().order_by('-id')
-    return render(request, "quizzes.html", {
-        "page": "quizzes",
-        "quizzes": quizzes,
-    })
 
+@login_required
+def CuradoriaView(request):
+    return render(request, "curadoria.html", {
+        "page": "curadoria"
+    })

@@ -11,7 +11,8 @@
     <body>
 
         <div class="popup">
-            <div class="large-popup popup-create-post">
+
+            <div class="large-popup popup-create-post" style="display: none;">
                 <div>
                     <div class="form-area">
                         <div class="popup-header">
@@ -42,6 +43,32 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="popup-create-quiz large-popup" style="display: none;">
+                <div>
+                    <div class="form-area">
+                        <div class="popup-header">
+                            <h2 class="popup-title">Novo Quiz</h2>
+                            <button onclick="closeCreatePostPopup()" class="popup-close-btn">✕</button>
+                        </div>
+            
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" class="csrf-token">
+            
+                        <input id="quizTitle" class="form-control modern-input" placeholder="Título do Quiz">
+                        <textarea id="quizDescription" class="form-control modern-input" rows="3" placeholder="Descrição do Quiz"></textarea>
+            
+                        <div id="questions" class="mt-3"></div>
+            
+                        <button class="btn btn-success btn-sm mt-3" onclick="addQuestion()">+ Adicionar Pergunta</button>
+            
+                        <hr>
+                        <div class="form-action-btns">
+                            <button class="btn btn-success submit-quiz-btn" onclick="submitQuiz()" disabled>Criar Quiz</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="body" data-page="{{page}}">

@@ -6,44 +6,19 @@
 {% endblock %}
 
 {% block body %}
+{% if user.userType == "mentor" %}
+    <button id="popup-btn" class="btn new-post-btn" onclick="createquiz()">Criar Quiz</button>
+{% endif %}
 <div class="container mt-4">
-    <h2>Quizzes Disponíveis</h2>
-
-    {% if user.userType == "mentor" %}
-        <a href="{% url 'App_BRASFI:create_quiz' %}" class="btn btn-primary mb-3">Criar Novo Quiz</a>
-    {% endif %}
-
     <ul class="list-group" id="quiz-list">
         {% for quiz in quizzes %}
             <li class="list-group-item d-flex justify-content-between align-items-center" data-id="{{ quiz.id }}">
                 {{ quiz.title }}
                 {% if user.userType == "mentor" %}
                 <button class="btn btn-sm btn-outline-danger" onclick="deleteQuiz('{{ quiz.id }}')">✕</button>
-
                 {% endif %}
             </li>
-        {% empty %}
-            <li class="list-group-item">Nenhum quiz disponível ainda.</li>
         {% endfor %}
     </ul>
 </div>
-
-<script>
-function deleteQuiz(quizId) {
-    if (!confirm("Tem certeza que deseja excluir este quiz?")) return;
-
-    fetch(`/quizzes/delete/${quizId}/`, {
-        method: "POST",
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}'
-        }
-    }).then(res => {
-        if (res.ok) {
-            document.querySelector(`li[data-id='${quizId}']`).remove();
-        } else {
-            alert("Erro ao tentar remover o quiz.");
-        }
-    });
-}
-</script>
 {% endblock %}
