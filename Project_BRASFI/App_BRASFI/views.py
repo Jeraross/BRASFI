@@ -168,8 +168,9 @@ def CreateQuizView(request):
         title = data.get('title', '').strip()
         description = data.get('description', '').strip()
         questions = data.get('questions', [])
+        time_per_question = data.get('time', 20)  # <- NOVO: tempo por pergunta
 
-        if not title or not description or not questions:
+        if not title or not questions:
             return JsonResponse({'status': 'error', 'message': 'Missing fields'}, status=400)
 
         try:
@@ -177,25 +178,20 @@ def CreateQuizView(request):
                 quiz = Quiz.objects.create(
                     title=title,
                     description=description,
-                    user=request.user  # 🔥 se você tem relação de usuário
+                    user=request.user,
+                    time_per_question=time_per_question  # <- SALVA o tempo no banco
                 )
 
                 for q in questions:
-                    q_text = q.get('text', '').strip()
-                    if not q_text:
-                        raise ValueError("Missing question text")
-
-                    question = Question.objects.create(quiz=quiz, text=q_text)
-
+                    question = Question.objects.create(quiz=quiz, text=q['text'])
                     for choice in q.get('choices', []):
                         Choice.objects.create(
                             question=question,
-                            text=choice.get('text', '').strip(),
+                            text=choice.get('text'),
                             is_correct=choice.get('is_correct', False)
                         )
 
             return JsonResponse({'status': 'ok', 'quiz_id': quiz.id})
-            
 
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
@@ -216,6 +212,30 @@ def DeleteQuizView(request, quiz_id):
 
     return JsonResponse({'error': 'Método não permitido'}, status=405)
 
+@login_required
+def PlayQuizView(request, quiz_id):
+    if request.user.userType != 'aprendiz':
+        return redirect('App_BRASFI:quizzes')
+
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    questions_qs = quiz.questions.prefetch_related('choices').all()
+
+    questions = []
+    for q in questions_qs:
+        questions.append({
+            "id": q.id,
+            "text": q.text,
+            "choices": [
+                {"id": c.id, "text": c.text, "is_correct": c.is_correct}
+                for c in q.choices.all()
+            ]
+        })
+
+    return render(request, 'quiz_play.html', {
+        'quiz': quiz,
+        'questions': questions,
+        'time_per_question': quiz.time_per_question or 20
+    })
 
 @login_required
 def CuradoriaView(request):

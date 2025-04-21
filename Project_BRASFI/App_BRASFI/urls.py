@@ -19,6 +19,8 @@ urlpatterns = [
     path('quizzes/create/', views.CreateQuizView, name='create_quiz'),
     path('quizzes/delete/<int:quiz_id>/', views.DeleteQuizView, name='delete_quiz'), 
     path('curadoria', views.CuradoriaView, name='curadoria'),
+    path('quizzes/play/<int:quiz_id>/', views.PlayQuizView, name='play_quiz'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

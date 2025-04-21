@@ -61,10 +61,22 @@ function createquiz() {
     const questionsDiv = quizPopup.querySelector("#questions");
     const submitBtn = quizPopup.querySelector(".submit-quiz-btn");
 
+    // Adiciona o campo de tempo se não existir ainda
+    if (!quizPopup.querySelector("#quizTime")) {
+        const timeInputDiv = document.createElement("div");
+        timeInputDiv.classList.add("mb-3");
+        timeInputDiv.innerHTML = `
+            <label for="quizTime" class="form-label">Tempo por pergunta (em segundos)</label>
+            <input type="number" class="form-control" id="quizTime" name="quizTime" min="5" value="20" required>
+        `;
+        descriptionInput.parentElement.insertBefore(timeInputDiv, questionsDiv);
+    }
+
     // Reset do conteúdo
     titleInput.value = '';
     descriptionInput.value = '';
     questionsDiv.innerHTML = '';
+    quizPopup.querySelector("#quizTime").value = 20;
     submitBtn.disabled = true;
 
     // Função de validação
@@ -90,6 +102,7 @@ function createquiz() {
     quizPopup.__observer__ = observer;
 }
 
+
 function addQuestion() {
     const questionsDiv = document.getElementById('questions');
     const totalPerguntasAtuais = questionsDiv.querySelectorAll('.card').length;
@@ -113,11 +126,14 @@ function addQuestion() {
 }
 
 function addChoice(button) {
+    const questionCard = button.closest('.card');
+    const questionIndex = Array.from(document.querySelectorAll('#questions .card')).indexOf(questionCard);
+
     const choiceDiv = document.createElement('div');
     choiceDiv.classList.add('input-group', 'mb-1');
     choiceDiv.innerHTML = `
         <div class="input-group-text">
-            <input type="radio" name="correct" class="correct-choice">
+            <input type="radio" name="correct-${questionIndex}" class="correct-choice">
         </div>
         <input type="text" class="form-control" placeholder="Texto da alternativa">
         <button class="btn btn-outline-danger" onclick="this.parentElement.remove()">✕</button>
@@ -125,6 +141,7 @@ function addChoice(button) {
 
     button.previousElementSibling.appendChild(choiceDiv);
 }
+
 
 function removeQuestion(button) {
     button.closest('.card').remove();
@@ -141,17 +158,24 @@ function renumerarPerguntas() {
 function submitQuiz() {
     const title = document.getElementById('quizTitle').value;
     const description = document.getElementById('quizDescription').value;
+    const time = parseInt(document.getElementById('quizTime').value) || 20;
     const questionBlocks = document.querySelectorAll('#questions > div');
     const csrfToken = document.querySelector('.popup-create-quiz input[name="csrfmiddlewaretoken"]').value;
 
-    const questions = Array.from(questionBlocks).map(qBlock => {
+    const questions = Array.from(questionBlocks).map((qBlock, qIndex) => {
         const text = qBlock.querySelector('input[name="qtext"]').value;
-        const choices = Array.from(qBlock.querySelectorAll('.input-group')).map(choiceDiv => {
-            return {
-                text: choiceDiv.querySelector('input[type="text"]').value,
-                is_correct: choiceDiv.querySelector('input[type="radio"]').checked
-            };
+        const choices = [];
+
+        const choiceDivs = qBlock.querySelectorAll('.input-group');
+        choiceDivs.forEach(choiceDiv => {
+            const inputText = choiceDiv.querySelector('input[type="text"]');
+            const inputRadio = choiceDiv.querySelector(`input[type="radio"][name="correct-${qIndex}"]`);
+            choices.push({
+                text: inputText.value,
+                is_correct: inputRadio.checked
+            });
         });
+
         return { text, choices };
     });
 
@@ -161,7 +185,7 @@ function submitQuiz() {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrfToken
         },
-        body: JSON.stringify({ title, description, questions })
+        body: JSON.stringify({ title, description, time, questions })
     })
     .then(res => res.json())
     .then(data => {
@@ -176,6 +200,7 @@ function submitQuiz() {
         alert("Erro inesperado. Tente novamente.");
     });
 }
+
 
 function deleteQuiz(quizId) {
     if (!confirm("Tem certeza que deseja excluir este quiz?")) return;

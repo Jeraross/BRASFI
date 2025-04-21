@@ -53,7 +53,8 @@ class Quiz(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quizzes", null=True, blank=True)  
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quizzes", null=True, blank=True)
+    time_per_question = models.IntegerField(default=20)  # << NOVO
 
     def __str__(self):
         return self.title
