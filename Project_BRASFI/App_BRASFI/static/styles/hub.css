@@ -61,46 +61,12 @@
 }
 
 /* --------------------- */
-/* HEADER FIXO          */
-/* --------------------- */
-.head {
-    position: fixed;
-    top: 0;
-    left: 17%;
-    width: 56%;
-    height: 7vh;
-    display: flex;
-    align-items: center;
-    z-index: 1000;
-}
-
-.heading {
-    position: fixed;
-    top: 0;
-    left: 17%;
-    width: 56%;
-    height: 7vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 1.4rem;
-    line-height: 1;
-    padding: 0 20px;
-    background-color: #fff;
-    color: #14171a;
-    border-bottom: 1px solid #e6ecf0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-}
-
-/* --------------------- */
 /* SIDEBAR BASE          */
 /* --------------------- */
 .sidenav {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 17%;
+    left: 0%;
+    width: 20%;
     height: 100%;
     background-color: #ffffff;
     padding: 20px 1.5% 0 1.5%;
@@ -238,8 +204,8 @@
 /* --------------------- */
 .main-div {
     position: relative;
-    width: 56%;
-    left: 17%;
+    width: 55%;
+    left: 20%;
     min-height: 100vh;
 }
 
@@ -247,12 +213,8 @@
     position: relative;
 }
 
-.left-div-content {
-    margin-top: 7.5vh;
-}
-
 .right-div {
-    width: 27%;
+    width: 25%;
     right: 0%;
     height: 100vh;
     position: fixed;

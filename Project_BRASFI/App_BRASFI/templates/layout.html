@@ -72,6 +72,7 @@
         </div>
 
         <div class="body" data-page="{{page}}">
+            
             <div class="sidenav">
                 <a href="{% url 'App_BRASFI:landing' %}" class="navbar-brand">
                     <img src="{% static 'img/BRASFI_nobg.png' %}" height="50px">
@@ -125,25 +126,10 @@
 
             <div class="main-div">
                 <div class="left-div">
-                    <nav class="head heading">
-                        {% if page == 'projecthub' %}
-                            Hub de Projetos
-                        {% elif page == 'networkhub' %}
-                            Hub de Network
-                        {% elif page == 'videos' %}
-                            Vídeos
-                        {% elif page == 'quizzes' %}
-                            Quizzes
-                        {% elif page == 'curadoria' %}
-                            Curadoria de Projetos
-                        {% endif %}
-                    </nav>
-                    <div class="left-div-content">
-                        <div class="posts-view">
-                            <div class="main-div-content">
-                                {% block body %}
-                                {% endblock %}
-                            </div>
+                    <div class="posts-view">
+                        <div class="main-div-content">
+                            {% block body %}
+                            {% endblock %}
                         </div>
                     </div>
                 </div>
@@ -155,6 +141,7 @@
                     {% endblock %}
                 </div>
             </div>
+
         </div>
     </body>
 </html>
