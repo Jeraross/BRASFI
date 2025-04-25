@@ -49,15 +49,17 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="tipo" style="margin-left: 10px;">Você é:</label>
-                <div class="custom-select-wrapper">
-                    <select name="tipo" id="tipo" class="custom-select inp tipo" required>
-                        <option value="" disabled selected hidden>Selecione uma opção *</option>
-                        <option value="mentor">Mentor</option>
-                        <option value="aprendiz">Aprendiz</option>
-                    </select>
+                <label style="margin-left: 10px;">Você é:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="tipo" value="mentor" required>
+                        <span>Mentor</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="tipo" value="aprendiz" required>
+                        <span>Aprendiz</span>
+                    </label>
                 </div>
-                <span class="star small"></span>
             </div>
 
 
