@@ -290,3 +290,6 @@ def CuradoriaView(request):
     return render(request, "curadoria.html", {
         "page": "curadoria"
     })
+
+def landing(request):
+    return render(request, 'landing.html')
