@@ -82,3 +82,57 @@
     {% endif %}
 
 {% endblock %}
+
+{% block right %}
+
+{% if request.user.userType == 'aprendiz' %}
+<div class="stats-box">
+    <h4>Suas Estatísticas</h4>
+    <div class="stats-card">
+        <div class="stats-row">
+            <i class="fas fa-user"></i>
+            <span>Usuário:</span>
+            <strong>{{ request.user.username }}</strong>
+        </div>
+        <div class="stats-row">
+            <i class="fas fa-list-ol"></i>
+            <span>Total de quizzes:</span>
+            <strong>{{ user_stats.total_quizzes }}</strong>
+        </div>
+        <div class="stats-row">
+            <i class="fas fa-percentage"></i>
+            <span>Média de acerto:</span>
+            <strong>{{ user_stats.average_score }}%</strong>
+        </div>
+        {% if user_stats.best_quiz %}
+        <div class="stats-row highlight">
+            <i class="fas fa-trophy"></i>
+            <span>Melhor desempenho:</span>
+            <strong>{{ user_stats.best_score }}% em {{ user_stats.best_quiz }}</strong>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% elif request.user.userType == 'mentor' %}
+    <div class="stats-box">
+        <h4>Top Aprendizes</h4>
+        <ul class="profile-list">
+            {% for student in top_students|slice:":5" %}
+            <li class="profile-card">
+                <div class="profile-avatar" style="background-image: url('/media/{{ student.user__profilePic }}');"></div>
+                <div class="profile-info">
+                    <div class="profile-name">
+                        {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% endif %}
+                        {{ student.user__username }}
+                    </div>
+                    <div class="profile-meta">Média: {{ student.avg_score|floatformat:1 }}%</div>
+                    <div class="profile-meta">Quizzes: {{ student.total_quizzes }}</div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+{% endblock %}

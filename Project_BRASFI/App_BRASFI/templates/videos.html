@@ -54,11 +54,11 @@
 {% endblock %}
 
 {% block right %}
-    
-<div class="section-highlight">
-    <h4>Mentores em Destaque</h4>
+
+<div class="stats-box">
+    <h4>Top Mentores</h4>
     <ul class="profile-list">
-        {% for mentor in top_mentors|slice:":3" %}
+        {% for mentor in top_mentors|slice:":6" %}
         <li class="profile-card">
             <div class="profile-avatar" style="background-image: url('/media/{{ mentor.profilePic }}');"></div>
             <div class="profile-info">
@@ -67,21 +67,6 @@
                     {{ mentor.username }}
                 </div>
                 <div class="profile-meta">{{ mentor.total_videos }} vídeos</div>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-
-<div class="section-highlight">
-    <h4>Conteúdos Recomendados</h4>
-    <ul class="media-list">
-        {% for rec_video in recommended_videos %}
-        <li class="media-card">
-            <video class="media-thumb" src="{{ rec_video.video_file.url }}" controls preload="metadata"></video>
-            <div class="media-info">
-                <div class="media-title">{{ rec_video.title }}</div>
-                <div class="media-author">{{ rec_video.user.username }}</div>
             </div>
         </li>
         {% endfor %}

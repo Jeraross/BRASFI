@@ -376,17 +376,6 @@
 /* --------------------- */
 /* RECOMENDADOS E MENTORES */  
 /* --------------------- */
-.section-highlight {
-    margin-top: 30px;
-}
-
-.section-highlight h4 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid #28a74533;
-}
 
 .profile-list,
 .media-list {
@@ -490,6 +479,60 @@
 .media-author {
     font-size: 0.8rem;
     color: #657786;
+}
+
+/* --------------------- */
+/* ESTATÍSTICAS         */
+/* --------------------- */
+.stats-box {
+    margin-top: 30px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stats-box h4 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #28a74533;
+    padding-bottom: 8px;
+    color: #1e2a38;
+}
+
+.stats-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.stats-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+    color: #333;
+    background-color: #f8f9fa;
+    padding: 10px 14px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.stats-row i {
+    color: #28a745;
+    font-size: 1.2rem;
+}
+
+.stats-row strong {
+    margin-left: auto;
+    font-weight: 600;
+    color: #222;
+}
+
+.stats-row.highlight {
+    background-color: #e9f9f0;
+    border-left: 4px solid #28a745;
 }
 
 /* --------------------- */

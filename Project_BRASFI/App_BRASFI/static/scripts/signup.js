@@ -1,23 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let check = [false, false, false, false, false]; // [username, password, confirm password, email, type]
+    let check = [false, false, false, false]; // [username, password, confirm password, email]
+
+    const updateSubmitState = () => {
+        const isFormValid = check.every(Boolean);
+        document.querySelector('input[type="submit"]').disabled = !isFormValid;
+    };
 
     document.querySelectorAll(".inp").forEach(input => {
         input.addEventListener('input', () => {
-
-            if(input.classList.contains('usrname')){
+            if (input.classList.contains('usrname')) {
                 check[0] = input.value.trim().length !== 0;
             }
 
-            if(input.classList.contains('pswd')){
+            if (input.classList.contains('pswd')) {
                 document.querySelector('.cpswd').value = "";
                 document.querySelector('.cpswd').parentElement.querySelector('span').innerText = "";
                 check[2] = false;
                 check[1] = input.value.trim().length !== 0;
             }
 
-            if(input.classList.contains('cpswd')){
-                if(input.value.trim().length !== 0) {
-                    if(input.value !== document.querySelector('.pswd').value) {
+            if (input.classList.contains('cpswd')) {
+                const password = document.querySelector('.pswd').value;
+                if (input.value.trim().length !== 0) {
+                    if (input.value !== password) {
                         input.parentElement.querySelector('span').innerText = "A senha deve corresponder";
                         check[2] = false;
                     } else {
@@ -29,36 +34,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            if(input.classList.contains('email')){
+            if (input.classList.contains('email')) {
                 check[3] = input.value.trim().length !== 0;
             }
 
-            if (input.classList.contains('tipo')) {
-                check[4] = input.value !== "";
-            }
-
-            let i;
-            for (i = 0; i < 5; i++) {
-                if (!check[i]) break;
-            }
-
-            document.querySelector('input[type="submit"]').disabled = i !== 5;
+            updateSubmitState();
         });
 
-        // Trigger change manually for select dropdown
+        // Se for SELECT, força o evento input
         if (input.tagName === "SELECT") {
             input.addEventListener('change', () => input.dispatchEvent(new Event('input')));
         }
     });
 
+    // Atualiza label do input de arquivo
     document.querySelectorAll('.custom-file-input').forEach(element => {
         element.addEventListener("change", event => {
             const label = event.target.parentElement.querySelector('.custom-file-label');
             if (event.target.files[0]) {
                 label.innerText = event.target.files[0].name;
             } else {
-                label.innerHTML = event.target.id === 'profile'
-                    `<span style="color: #6c757d;">Escolha a foto do perfil</span>`;
+                label.innerHTML = '<span style="color: #6c757d;">Escolha a foto do perfil</span>';
             }
         });
     });

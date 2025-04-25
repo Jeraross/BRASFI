@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Count
+from django.db.models import Count, Avg
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -125,14 +125,11 @@ def VideosView(request):
         .annotate(total_videos=Count('videos'))\
         .order_by('-total_videos')[:5]
 
-    # Vídeos recomendados (3 aleatórios)
-    recommended_videos = sample(list(all_videos), 3) if all_videos.count() >= 3 else all_videos
 
     return render(request, "videos.html", {
         "page": "videos",
         "videos": all_videos,
         'top_mentors': top_mentors_raw,
-        'recommended_videos': recommended_videos,
     })
 
 @login_required
@@ -197,9 +194,40 @@ def QuizzesView(request):
 
         quizzes_with_ranking.append(item)
 
+    user_stats = {}
+    top_students = []
+
+    if request.user.userType == 'aprendiz':
+        results = QuizResult.objects.filter(user=request.user)
+        total = results.count()
+        avg = results.aggregate(Avg('percentage'))['percentage__avg'] or 0
+        best = results.order_by('-percentage').first()
+
+        user_stats = {
+            'total_quizzes': total,
+            'average_score': round(avg, 2),
+            'best_score': best.percentage if best else 0,
+            'best_quiz': best.quiz.title if best else None
+        }
+
+    elif request.user.userType == 'mentor':
+        # Alunos com mais de 1 quiz feito e boa média
+        top_students = (
+            QuizResult.objects
+            .values('user__username', 'user__profilePic')
+            .annotate(
+                total_quizzes=Count('quiz', distinct=True),
+                avg_score=Avg('percentage')
+            )
+            .filter(total_quizzes__gte=1)
+            .order_by('-avg_score')[:5]
+        )
+
     return render(request, "quizzes.html", {
         "page": "quizzes",
-        "quizzes_with_ranking": quizzes_with_ranking
+        "quizzes_with_ranking": quizzes_with_ranking,
+        "user_stats": user_stats,
+        "top_students": top_students
     })
 
 @login_required
