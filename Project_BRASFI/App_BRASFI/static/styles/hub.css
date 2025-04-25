@@ -280,7 +280,7 @@
 }
 
 /* --------------------- */
-/* VIDEO POSTS / CARDS   */
+/*      POSTS / CARDS   */
 /* --------------------- */
 
 .posts-view {
@@ -374,7 +374,61 @@
 }
 
 /* --------------------- */
-/* RECOMENDADOS E MENTORES */  
+/* RANKING in Quiz       */
+/* --------------------- */
+.ranking-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    background-color: #ffffff;
+}
+
+.ranking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
+}
+
+.ranking-item:last-child {
+    border-bottom: none;
+}
+
+.ranking-item:hover {
+    background-color: #f0f9f5;
+}
+
+.ranking-username {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.ranking-score {
+    background-color: #28a74511;
+    color: #28a745;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.ranking-score small {
+    color: #666;
+    font-size: 0.75rem;
+}
+
+
+/* --------------------- */
+/* MENTORES              */  
 /* --------------------- */
 
 .profile-list,
@@ -426,59 +480,6 @@
 .profile-meta {
     font-size: 0.8rem;
     color: #777;
-}
-
-/* CARTÃO DE MÍDIA */
-.media-card {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    background-color: #fff;
-    border-radius: 14px;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
-}
-
-.media-card:hover {
-    background-color: #edfff4;
-    transform: scale(1.02);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.media-thumb {
-    width: 110px;
-    height: 64px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-right: 14px;
-    border: 2px solid #28a74522;
-    transition: border-color 0.3s ease;
-}
-
-.media-card:hover .media-thumb {
-    border-color: #28a74588;
-}
-
-.media-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.media-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.media-author {
-    font-size: 0.8rem;
-    color: #657786;
 }
 
 /* --------------------- */

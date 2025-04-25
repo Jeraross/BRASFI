@@ -76,3 +76,20 @@
     background-color: #d8f5e1;
     border-color: #28a745;
 }
+
+/* --------------------- */
+/* SCROLLBAR ESTILIZADO  */
+/* --------------------- */
+
+::-webkit-scrollbar {
+    width: 5px; /* Largura da barra de rolagem */
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3); /* Cor da "bolinha" do scroll */
+    transition: background 0.3s ease; /* Transição suave para mudar a cor */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5); /* Cor quando o scroll está sendo usado */
+}
