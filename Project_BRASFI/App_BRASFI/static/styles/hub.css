@@ -23,7 +23,7 @@
 /* BOTÕES                */
 /* --------------------- */
 .new-post-btn {
-    width: 90%;
+    width: 95%;
     margin: 0 auto 0 auto;
     background-color: #c2fbd7;
     border-radius: 100px;
@@ -35,7 +35,6 @@
                 rgba(44, 187, 99, .15) 0 16px 32px;
     color: green;
     cursor: pointer;
-    font-family: Inter, sans-serif;
     font-size: 1rem;
     font-weight: 600;
     padding: 10px 24px;
@@ -66,7 +65,7 @@
 .sidenav {
     position: fixed;
     left: 0%;
-    width: 20%;
+    width: 17.5%;
     height: 100%;
     background-color: #ffffff;
     padding: 20px 1.5% 0 1.5%;
@@ -204,8 +203,8 @@
 /* --------------------- */
 .main-div {
     position: relative;
-    width: 55%;
-    left: 20%;
+    width: 60%;
+    left: 17.5%;
     min-height: 100vh;
 }
 
@@ -214,7 +213,7 @@
 }
 
 .right-div {
-    width: 25%;
+    width: 22.5%;
     right: 0%;
     height: 100vh;
     position: fixed;
@@ -237,10 +236,9 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
-    padding: 30px 5% 20px 5%;
+    padding: 30px 2.5% 20px 2.5%;
     max-width: 1100px;
     margin: auto;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .post-card {
@@ -327,108 +325,110 @@
 /* --------------------- */
 /* RECOMENDADOS E MENTORES */  
 /* --------------------- */
-.right-div-content h4 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-    padding-bottom: 6px;
-
-}
-
-.top-mentors, .recommended-videos {
+.section-highlight {
     margin-top: 30px;
 }
 
-.mentor-list, .recommended-list {
+.section-highlight h4 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #28a74533;
+}
+
+.profile-list,
+.media-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
 }
 
-/* MENTORES */
-.mentor-item {
-    background-color: #f9f9f9;
-    border-radius: 12px;
-    padding: 10px 14px;
+/* CARTÃO DE PERFIL */
+.profile-card {
     display: flex;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    padding: 12px 16px;
+    background-color: #fefefe;
+    border-radius: 14px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     transition: background-color 0.3s ease;
 }
 
-.mentor-item:hover {
-    background-color: #f0fff7;
+.profile-card:hover {
+    background-color: #f2fff6;
 }
 
-.mentor-pic {
-    width: 40px;
-    height: 40px;
+.profile-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    margin-right: 14px;
     background-size: cover;
     background-position: center;
-    border-radius: 50%;
-    margin-right: 12px;
-    border: 2px solid #28a74533;
+    border: 2px solid #28a74522;
 }
 
-.mentor-details {
+.profile-info {
     display: flex;
     flex-direction: column;
 }
 
-.mentor-name {
+.profile-name {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #14171a;
 }
 
-.mentor-meta {
+.profile-meta {
     font-size: 0.8rem;
     color: #777;
 }
 
-/* RECOMENDADOS */
-.recommended-item {
+/* CARTÃO DE MÍDIA */
+.media-card {
     display: flex;
-    background-color: #fefefe;
-    padding: 10px 14px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: #fff;
+    border-radius: 14px;
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
 }
 
-.recommended-item:hover {
-    transform: scale(1.01);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    background-color: #f4fff8;
+.media-card:hover {
+    background-color: #edfff4;
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.rec-mini-player {
-    width: 100px;
-    height: 60px;
-    border-radius: 6px;
+.media-thumb {
+    width: 110px;
+    height: 64px;
+    border-radius: 8px;
     object-fit: cover;
-    margin-right: 12px;
+    margin-right: 14px;
     border: 2px solid #28a74522;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease;
 }
 
-.recommended-item:hover .rec-mini-player {
+.media-card:hover .media-thumb {
     border-color: #28a74588;
 }
 
-.rec-info {
+.media-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
 }
 
-.rec-title {
-    font-size: 0.95rem;
+.media-title {
+    font-size: 1rem;
     font-weight: 600;
     color: #1a1a1a;
     white-space: nowrap;
@@ -436,7 +436,7 @@
     text-overflow: ellipsis;
 }
 
-.rec-author {
+.media-author {
     font-size: 0.8rem;
     color: #657786;
 }

@@ -55,33 +55,33 @@
 
 {% block right %}
     
-<div class="top-mentors">
-    <h4>Top Mentores da Semana</h4>
-    <ul class="mentor-list">
+<div class="section-highlight">
+    <h4>Mentores em Destaque</h4>
+    <ul class="profile-list">
         {% for mentor in top_mentors %}
-        <li class="mentor-item">
-            <div class="mentor-pic" style="background-image: url('/media/{{ mentor.profilePic }}');"></div>
-            <div class="mentor-details">
-                <div class="mentor-name">
+        <li class="profile-card">
+            <div class="profile-avatar" style="background-image: url('/media/{{ mentor.profilePic }}');"></div>
+            <div class="profile-info">
+                <div class="profile-name">
                     {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% endif %}
                     {{ mentor.username }}
                 </div>
-                <div class="mentor-meta">{{ mentor.total_videos }} vídeos</div>
+                <div class="profile-meta">{{ mentor.total_videos }} vídeos</div>
             </div>
         </li>
         {% endfor %}
     </ul>
 </div>
 
-<div class="recommended-videos">
-    <h4>Vídeos Recomendados</h4>
-    <ul class="recommended-list">
+<div class="section-highlight">
+    <h4>Conteúdos Recomendados</h4>
+    <ul class="media-list">
         {% for rec_video in recommended_videos %}
-        <li class="recommended-item" onclick="window.location.href='{{ rec_video.video_file.url }}'">
-            <video class="rec-mini-player" src="{{ rec_video.video_file.url }}" muted playsinline preload="metadata"></video>
-            <div class="rec-info">
-                <div class="rec-title">{{ rec_video.title }}</div>
-                <div class="rec-author">{{ rec_video.user.username }}</div>
+        <li class="media-card">
+            <video class="media-thumb" src="{{ rec_video.video_file.url }}" controls preload="metadata"></video>
+            <div class="media-info">
+                <div class="media-title">{{ rec_video.title }}</div>
+                <div class="media-author">{{ rec_video.user.username }}</div>
             </div>
         </li>
         {% endfor %}

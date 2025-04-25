@@ -1,10 +1,8 @@
-/* quiz_interativo.css - versão verde e branco */
-
 body {
   margin: 0;
   padding: 0;
   background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-  font-family: 'Poppins', sans-serif;
+  font-family: Inter,sans-serif;
   color: #2e7d32;
   display: flex;
   align-items: center;
