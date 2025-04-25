@@ -58,7 +58,7 @@
 <div class="section-highlight">
     <h4>Mentores em Destaque</h4>
     <ul class="profile-list">
-        {% for mentor in top_mentors %}
+        {% for mentor in top_mentors|slice:":3" %}
         <li class="profile-card">
             <div class="profile-avatar" style="background-image: url('/media/{{ mentor.profilePic }}');"></div>
             <div class="profile-info">

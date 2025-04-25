@@ -573,6 +573,106 @@
     background-color: #1e9237;
 }
 
+#questions {
+    margin-top: 20px;
+}
+
+/* Estilo para cada cartão de pergunta */
+#questions .card {
+    background-color: #fefefe;
+    border: 1px solid #e2e2e2;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    padding: 20px;
+    transition: box-shadow 0.3s ease;
+}
+
+#questions .card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+#questions h5 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Estilo para o input de texto da pergunta */
+#questions input[name="qtext"] {
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px 14px;
+    font-size: 1rem;
+    width: 100%;
+    background-color: #f8f8f8;
+    transition: border 0.3s ease;
+}
+
+#questions input[name="qtext"]:focus {
+    border-color: #28a745;
+    background-color: #fff;
+}
+
+/* Alternativas */
+#questions .choices {
+    margin-bottom: 10px;
+}
+
+#questions .input-group {
+    display: flex;
+    align-items: center;
+}
+
+#questions .input-group-text {
+    background-color: #e6f4ea;
+    border: 1px solid #28a745;
+    border-right: none;
+    padding: 11.5px;
+    border-radius: 8px 0 0 8px;
+}
+
+#questions .input-group input[type="text"] {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    background-color: #f9f9f9;
+    transition: border 0.3s ease;
+}
+
+#questions .input-group input[type="text"]:focus {
+    border-color: #28a745;
+    background-color: #fff;
+}
+
+#questions .btn-outline-danger {
+    margin-left: 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+/* Botão de adicionar alternativa */
+#questions .btn-outline-primary {
+    background-color: #f0f9f5;
+    border-color: #28a745;
+    color: #28a745;
+    transition: background-color 0.2s ease;
+    border-radius: 6px;
+}
+
+#questions .btn-outline-primary:hover {
+    background-color: #d8f2e1;
+}
+
+/* Botão de remover pergunta */
+#questions .btn-danger.btn-sm {
+    padding: 4px 10px;
+    font-size: 0.9rem;
+}
+
 /* --------------------- */
 /* SCROLLBAR ESTILIZADO  */
 /* --------------------- */

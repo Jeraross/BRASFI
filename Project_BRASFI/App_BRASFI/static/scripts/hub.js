@@ -66,7 +66,7 @@ function createquiz() {
         const timeInputDiv = document.createElement("div");
         timeInputDiv.classList.add("mb-3");
         timeInputDiv.innerHTML = `
-            <label for="quizTime" class="form-label">Tempo por pergunta (em segundos)</label>
+            <label for="quizTime" class="form-label mt-3">Tempo por pergunta (em segundos)</label>
             <input type="number" class="form-control" id="quizTime" name="quizTime" min="5" value="20" required>
         `;
         descriptionInput.parentElement.insertBefore(timeInputDiv, questionsDiv);
@@ -112,13 +112,16 @@ function addQuestion() {
     qDiv.classList.add('card', 'my-3', 'p-3');
 
     qDiv.innerHTML = `
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5>Pergunta ${numeroPergunta}</h5>
-            <button type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(this)">✕</button>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Pergunta ${numeroPergunta}</h5>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeQuestion(this)" title="Remover pergunta">✕</button>
         </div>
-        <input type="text" class="form-control mb-2" placeholder="Enunciado da pergunta" name="qtext">
+
+        <input type="text" name="qtext" class="form-control modern-input mb-3" placeholder="Enunciado da pergunta" required>
+
         <div class="choices"></div>
-        <button class="btn btn-sm btn-outline-primary my-1" onclick="addChoice(this)">+ Alternativa</button>
+
+        <button type="button" class="btn btn-sm btn-outline-primary mt-2" onclick="addChoice(this)">+ Adicionar Alternativa</button>
     `;
 
     questionsDiv.appendChild(qDiv);
@@ -128,20 +131,21 @@ function addQuestion() {
 function addChoice(button) {
     const questionCard = button.closest('.card');
     const questionIndex = Array.from(document.querySelectorAll('#questions .card')).indexOf(questionCard);
+    const choicesContainer = button.previousElementSibling;
 
     const choiceDiv = document.createElement('div');
-    choiceDiv.classList.add('input-group', 'mb-1');
+    choiceDiv.classList.add('input-group', 'mb-2');
+
     choiceDiv.innerHTML = `
         <div class="input-group-text">
-            <input type="radio" name="correct-${questionIndex}" class="correct-choice">
+            <input type="radio" name="correct-${questionIndex}" class="correct-choice" title="Resposta correta">
         </div>
-        <input type="text" class="form-control" placeholder="Texto da alternativa">
-        <button class="btn btn-outline-danger" onclick="this.parentElement.remove()">✕</button>
+        <input type="text" class="form-control" placeholder="Texto da alternativa" required>
+        <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.remove()" title="Remover alternativa">✕</button>
     `;
 
-    button.previousElementSibling.appendChild(choiceDiv);
+    choicesContainer.appendChild(choiceDiv);
 }
-
 
 function removeQuestion(button) {
     button.closest('.card').remove();
