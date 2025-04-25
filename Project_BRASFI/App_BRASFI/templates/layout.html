@@ -69,6 +69,34 @@
                 </div>
             </div>
 
+            <div class="large-popup popup-edit" style="display: none;">
+                <div>
+                    <div class="form-area">
+                        <div class="popup-header">
+                            <h2 class="popup-title">Editar Perfil</h2>
+                            <button onclick="closeCreatePostPopup()" class="popup-close-btn">✕</button>
+                        </div>
+                        <form method="POST" action="{% url 'App_BRASFI:edit_profile' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group mb-3">
+                                <label>Nome</label>
+                                <input type="text" name="username" class="form-control modern-input" value="{{ user.username }}">
+                            </div>
+
+                            <input name="profilePic" accept="image/*" type="file" style="display: none;" id="new-profile-upload">
+                            <label for="new-profile-upload" class="modern-upload-btn">
+                                <span style="font-size: 0.95em;">Foto de Perfil</span>
+                            </label>
+
+                            <hr>
+                            <div class="form-action-btns">
+                                <button type="submit" class="btn btn-success float-right submit-btn">Salvar Alterações</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="body" data-page="{{page}}">
@@ -106,15 +134,19 @@
                         </a>
                     </li>
                     {% endif %}
-                    <li class="nav-item">
-                        <a href="{% url 'App_BRASFI:logout' %}" class="nav-link logout-link">
-                            <div>Log Out</div>
-                        </a>
-                    </li>
                 </ul>
             
+                <!-- MENU FLUTUANTE -->
+                <div class="user-dropdown-menu" id="userDropdown" style="display: none;">
+                    <ul>
+                        <li onclick="editProfile()">Editar Perfil</li>
+                        <li><a href="{% url 'App_BRASFI:logout' %}">Sair</a></li>
+                    </ul>
+                </div>
+
+                <!-- BLOCO DO USUÁRIO -->
                 <div class="sidenav-user-wrapper">
-                    <div class="user_account">
+                    <div class="user_account" onclick="toggleUserDropdown(event)">
                         <div class="small-profilepic" style="background-image: url('/media/{{ user.profilePic }}')"></div>
                         <div class="user-info">
                             <div class="username">{{ user.username }}</div>
@@ -122,6 +154,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="main-div">

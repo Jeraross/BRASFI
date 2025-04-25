@@ -176,7 +176,7 @@
 }
 
 .user_account:hover {
-    background-color: #f5f8fa;
+    background-color: #28a74522;
 }
 
 .user-info {
@@ -196,6 +196,57 @@
     background-repeat: no-repeat;
     background-position: center;
     box-sizing: content-box;
+}
+
+/* --------------------- */
+/* MENU DROPDOWN         */
+/* --------------------- */
+.user-dropdown-menu {
+    position: absolute;
+    bottom: 100px;
+    left: 15px;
+    width: calc(100% - 30px);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    z-index: 10000;
+    overflow: hidden;
+    animation: slideUp 0.2s ease-out;
+}
+
+.user-dropdown-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.user-dropdown-menu li {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: 500;
+    color: #333;
+}
+
+.user-dropdown-menu li:hover {
+    background-color: #f0f9f5;
+}
+
+.user-dropdown-menu a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* --------------------- */

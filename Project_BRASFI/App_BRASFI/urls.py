@@ -21,7 +21,7 @@ urlpatterns = [
     path('curadoria', views.CuradoriaView, name='curadoria'),
     path('quizzes/play/<int:quiz_id>/', views.PlayQuizView, name='play_quiz'),
     path('quizzes/submit/', views.SubmitQuizResultView, name='submit_quiz'),
-    path('', views.landing, name='landing'),
+    path('profile', views.EditProfileView, name='edit_profile'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -78,6 +78,31 @@ def RegisterView(request):
 
     return render(request, "register.html")
 
+@login_required
+def EditProfileView(request):
+    if request.method == 'POST':
+        user = request.user
+
+        new_username = request.POST.get('username', user.username).strip()
+        profile_pic = request.FILES.get('profilePic') 
+
+        if new_username != user.username and User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
+            messages.error(request, 'Este nome de usuário já está em uso. Escolha outro.')
+            return HttpResponseRedirect(reverse("App_BRASFI:projecthub"))
+
+        user.username = new_username
+        user.save()
+
+        if profile_pic:
+            profile = getattr(user, 'profile', None)
+            if profile:
+                profile.profilePic = profile_pic
+                profile.save()
+
+        messages.success(request, 'Perfil atualizado com sucesso!')
+        return HttpResponseRedirect(reverse("App_BRASFI:projecthub"))
+
+    return HttpResponse("Method must be 'POST'")
 
 @login_required
 def ProjectHubView(request):
@@ -110,6 +135,7 @@ def VideosView(request):
         'recommended_videos': recommended_videos,
     })
 
+@login_required
 def CreateVideoView(request):
     if request.method == "POST":
         title = request.POST.get("title")
@@ -148,7 +174,7 @@ def DeleteVideoView(request, video_id):
 
     return redirect('App_BRASFI:videos')
 
-
+@login_required
 def QuizzesView(request):
     quizzes = Quiz.objects.all().order_by('-id')
     quizzes_with_ranking = []
@@ -175,8 +201,6 @@ def QuizzesView(request):
         "page": "quizzes",
         "quizzes_with_ranking": quizzes_with_ranking
     })
-
-
 
 @login_required
 def CreateQuizView(request):
@@ -290,6 +314,3 @@ def CuradoriaView(request):
     return render(request, "curadoria.html", {
         "page": "curadoria"
     })
-
-def landing(request):
-    return render(request, 'landing.html')

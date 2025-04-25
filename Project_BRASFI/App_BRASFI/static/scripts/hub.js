@@ -1,3 +1,48 @@
+function toggleUserDropdown(event) {
+    const dropdown = document.getElementById('userDropdown');
+    dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+    event.stopPropagation();
+}
+
+// Fecha o dropdown ao clicar fora
+document.addEventListener('click', function () {
+    const dropdown = document.getElementById('userDropdown');
+    dropdown.style.display = 'none';
+});
+
+function editProfile() {
+    const popup = document.querySelector(".popup");
+    popup.style.display = 'block';
+    const editPopup = popup.querySelector('.popup-edit');
+    editPopup.style.display = 'block';
+
+    document.querySelector('.body').setAttribute('aria-hidden', 'true');
+    document.querySelector('body').style.overflow = "hidden";
+
+    const nameInput = editPopup.querySelector("input[name='username']");
+    const profilePicInput = editPopup.querySelector("input[name='profilePic']");
+    const submitBtn = editPopup.querySelector("button[type='submit']");
+
+    // Reset apenas do input de arquivo
+    profilePicInput.value = '';
+    
+    // Habilita o botão só se houver alteração
+    const originalName = nameInput.value;
+
+    function validateEditForm() {
+        const nameChanged = nameInput.value.trim() !== originalName.trim();
+        const picUploaded = profilePicInput.files.length > 0;
+
+        submitBtn.disabled = !(nameChanged || picUploaded);
+    }
+
+    nameInput.addEventListener('input', validateEditForm);
+    profilePicInput.addEventListener('change', validateEditForm);
+
+    // Executa uma validação inicial
+    validateEditForm();
+}
+
 function createvideo() {
     const popup = document.querySelector(".popup");
     popup.style.display = 'block';
@@ -48,7 +93,6 @@ function createquiz() {
     const popup = document.querySelector(".popup");
     popup.style.display = 'block';
     const quizPopup = popup.querySelector('.popup-create-quiz');
-
     quizPopup.style.display = 'block';
 
     // Bloquear fundo
