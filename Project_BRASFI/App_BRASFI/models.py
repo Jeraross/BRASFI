@@ -127,3 +127,21 @@ class Projeto(models.Model):
             'user': self.user.username,
             'rejection_reason': self.rejection_reason,
         }
+
+class Comentario(models.Model):
+    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, related_name="comentarios")
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    mensagem = models.TextField()
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.autor.username} comentou em {self.projeto.title}"
+
+class Resposta(models.Model):
+    comentario = models.ForeignKey(Comentario, on_delete=models.CASCADE, related_name="respostas")
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    mensagem = models.TextField()
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.autor.username} respondeu a {self.comentario.id}"

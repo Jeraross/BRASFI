@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto
+from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto, Comentario, Resposta
 from django.http import JsonResponse
 import json
 
@@ -408,3 +408,32 @@ def SubmitQuizResultView(request):
         return JsonResponse({'status': 'ok'})
 
     return JsonResponse({'status': 'error', 'message': 'Método inválido'}, status=400)
+
+
+def forum_projeto(request, projeto_id):
+    projeto = get_object_or_404(Projeto, id=projeto_id)
+    comentarios = Comentario.objects.filter(projeto=projeto).order_by('-criado_em')
+    return render(request, 'forum.html', {'projeto': projeto, 'comentarios': comentarios})
+
+@login_required
+def novo_comentario(request, projeto_id):
+    projeto = get_object_or_404(Projeto, id=projeto_id)
+    
+    if request.method == "POST":
+        mensagem = request.POST.get('mensagem')
+        # Adicionar o novo comentário ao projeto
+        Comentario.objects.create(projeto=projeto, mensagem=mensagem, autor=request.user)
+        return HttpResponseRedirect('/projecthub')  # Redirecionar após salvar o comentário
+    
+    return render(request, 'projecthub.html', {'projeto': projeto})
+
+@login_required
+def responder_comentario(request, comentario_id):
+    if request.method == 'POST':
+        comentario = get_object_or_404(Comentario, id=comentario_id)
+        Resposta.objects.create(
+            comentario=comentario,
+            autor=request.user,
+            mensagem=request.POST['mensagem']
+        )
+    return redirect('forum_projeto', projeto_id=comentario.projeto.id)

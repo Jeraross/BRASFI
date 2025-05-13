@@ -25,6 +25,9 @@ urlpatterns = [
     path('quizzes/play/<int:quiz_id>/', views.PlayQuizView, name='play_quiz'),
     path('quizzes/submit/', views.SubmitQuizResultView, name='submit_quiz'),
     path('profile', views.EditProfileView, name='edit_profile'),
+    path('projeto/<int:projeto_id>/forum/', views.forum_projeto, name='forum_projeto'),
+    path('projeto/<int:projeto_id>/novo_comentario/', views.novo_comentario, name='novo_comentario'),
+    path('comentario/<int:comentario_id>/responder/', views.responder_comentario, name='responder_comentario'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

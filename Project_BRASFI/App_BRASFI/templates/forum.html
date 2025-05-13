@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Discussões sobre: {{ projeto.title }}</h2>
+
+{% if user.is_authenticated %}
+  <form action="{% url 'novo_comentario' projeto.id %}" method="post">
+    {% csrf_token %}
+    <textarea name="mensagem" rows="3" placeholder="Novo comentário..."></textarea><br>
+    <button type="submit">Publicar</button>
+  </form>
+{% else %}
+  <p>Você precisa estar logado para comentar.</p>
+{% endif %}
+
+<hr>
+
+{% for comentario in comentarios %}
+  <div style="margin-bottom: 20px;">
+    <p><strong>{{ comentario.autor.username }}</strong>: {{ comentario.mensagem }}</p>
+    <small>{{ comentario.criado_em }}</small>
+
+    {% for resposta in comentario.respostas.all %}
+      <div style="margin-left: 20px;">
+        <p><strong>{{ resposta.autor.username }}</strong> respondeu: {{ resposta.mensagem }}</p>
+        <small>{{ resposta.criado_em }}</small>
+      </div>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+      <form action="{% url 'responder_comentario' comentario.id %}" method="post" style="margin-left: 20px;">
+        {% csrf_token %}
+        <textarea name="mensagem" rows="2" placeholder="Responder..."></textarea><br>
+        <button type="submit">Responder</button>
+      </form>
+    {% endif %}
+  </div>
+{% endfor %}
+{% endblock %}

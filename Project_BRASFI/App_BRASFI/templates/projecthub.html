@@ -10,6 +10,7 @@
     {% if user.userType == "aprendiz" %}
         <button id="popup-btn" class="btn new-post-btn" onclick="createproject()">Criar Projeto</button>
     {% endif %}
+    
     {% if projetos %}
     <div class="posts-view">
         {% for projeto in projetos %}
@@ -32,6 +33,43 @@
                 <p><strong>Área de Impacto:</strong> {{ projeto.impact_area }}</p>
                 <p><strong>Descrição:</strong> {{ projeto.description }}</p>
                 <p><strong>Objetivos:</strong> {{ projeto.objective }}</p>
+            </div>
+
+            <!-- Botão de Discussões -->
+            <button onclick="toggleForum('{{ projeto.id }}')">💬 Discussões</button>
+            <div id="forum-{{ projeto.id }}" style="display:none; margin-top:10px;">
+                {% for comentario in projeto.comentarios.all %}
+                    <div>
+                        <strong>{{ comentario.autor.username }}</strong>: {{ comentario.mensagem }} <br>
+                        <small>{{ comentario.criado_em }}</small>
+
+                        {% for resposta in comentario.respostas.all %}
+                            <div style="margin-left:20px;">
+                                <strong>{{ resposta.autor.username }}</strong>: {{ resposta.mensagem }} <br>
+                                <small>{{ resposta.criado_em }}</small>
+                            </div>
+                        {% endfor %}
+
+                        {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'App_BRASFI:responder_comentario' comentario.id %}">
+                            {% csrf_token %}
+                            <textarea name="mensagem" rows="1" placeholder="Responder..."></textarea>
+                            <button type="submit">Responder</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    <hr>
+                {% endfor %}
+
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'App_BRASFI:novo_comentario' projeto.id %}">
+                    {% csrf_token %}
+                    <textarea name="mensagem" rows="2" placeholder="Novo comentário..."></textarea><br>
+                    <button type="submit">Publicar</button>
+                </form>
+                {% else %}
+                <p>Você precisa estar logado para comentar.</p>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
