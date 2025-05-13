@@ -28,6 +28,7 @@ urlpatterns = [
     path('projeto/<int:projeto_id>/forum/', views.forum_projeto, name='forum_projeto'),
     path('projecthub/novo_comentario/<int:projeto_id>/', views.novo_comentario, name='novo_comentario'),
     path('projecthub/responder/<int:comentario_id>/', views.responder_comentario, name='responder_comentario'),
+    path('projecthub/delete/<int:projeto_id>/',views.delete_project,name='delete_project'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

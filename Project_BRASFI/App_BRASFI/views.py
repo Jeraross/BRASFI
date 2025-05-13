@@ -110,7 +110,7 @@ def ProjectHubView(request):
             Q(status="aprovado") | Q(user=request.user)
         ).order_by("-created_at")
     else:
-        projetos = Projeto.objects.filter(status="aprovado").order_by("-created_at")
+        projetos = Projeto.objects.all().order_by("-created_at")
 
     return render(request, "projecthub.html", {
         "page": "projecthub",
@@ -423,7 +423,7 @@ def forum_projeto(request, projeto_id):
 
 @login_required
 def novo_comentario(request, projeto_id):
-    if request.method == 'POST' and request.user.userType == 'aprendiz':
+    if request.method == 'POST':
         texto = request.POST.get('mensagem', '').strip()
         if texto:
             projeto = get_object_or_404(Projeto, id=projeto_id)
@@ -435,11 +435,22 @@ def novo_comentario(request, projeto_id):
 
 @login_required
 def responder_comentario(request, comentario_id):
-    if request.method == 'POST' and request.user.userType == 'aprendiz':
+    if request.method == 'POST':
         texto = request.POST.get('mensagem', '').strip()
         if texto:
             comentario = get_object_or_404(Comentario, id=comentario_id)
             Resposta.objects.create(comentario=comentario, autor=request.user, mensagem=texto)
         else:
             messages.error(request, "Resposta vazia não permitida.")
+    return redirect('App_BRASFI:projecthub')
+
+@login_required
+def delete_project(request, projeto_id):
+    projeto = get_object_or_404(Projeto, id=projeto_id)
+    # Só o aprendiz dono pode excluir
+    if request.user.userType == 'aprendiz' and projeto.user == request.user:
+        projeto.delete()
+        messages.success(request, "Projeto excluído com sucesso.")
+    else:
+        messages.error(request, "Você não tem permissão para excluir este projeto.")
     return redirect('App_BRASFI:projecthub')

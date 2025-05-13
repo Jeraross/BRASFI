@@ -51,7 +51,7 @@
                             </div>
                         {% endfor %}
 
-                        {% if user.userType == "aprendiz" %}
+                        {% if user.is_authenticated %}
                         <form method="post" action="{% url 'App_BRASFI:responder_comentario' comentario.id %}">
                             {% csrf_token %}
                             <textarea name="mensagem" rows="1" placeholder="Responder..." required></textarea>
@@ -62,7 +62,7 @@
                     <hr>
                 {% endfor %}
 
-                {% if user.userType == "aprendiz" %}
+                {% if user.is_authenticated %}
                 <form method="post" action="{% url 'App_BRASFI:novo_comentario' projeto.id %}">
                     {% csrf_token %}
                     <textarea name="mensagem" rows="2" placeholder="Novo comentário..." required></textarea><br>
@@ -72,6 +72,20 @@
                 <p>Você precisa ser aprendiz para comentar.</p>
                 {% endif %}
             </div>
+
+            {% if user.userType == "aprendiz" and projeto.user == user %}
+            <form
+                action="{% url 'App_BRASFI:delete_project' projeto.id %}"
+                method="post"
+                style="display:inline; margin-top:10px;"
+                onsubmit="return confirm('Tem certeza que deseja excluir este projeto?');"
+>
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                Excluir Projeto
+                </button>
+            </form>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
