@@ -5,3 +5,49 @@
 {% block title %}
     Curadoria | BRASFI
 {% endblock %}
+
+{% block body %}
+    {% if projetos %}
+    <div class="posts-view">
+        {% for projeto in projetos %}
+        <div class="post-card">
+            <!-- Header: Criador e Data -->
+            <div class="post-header">
+                <div class="creator-info">
+                    <div class="small-profilepic" style="background-image: url('/media/{{ projeto.user.profilePic }}');"></div>
+                    <div>
+                        <div class="username">{{ projeto.user.username }}</div>
+                        <div class="user-type">{{ projeto.user.userType }}</div>
+                    </div>
+                </div>
+                <div class="created-at">{{ projeto.created_at|date:"d M Y · H:i" }}</div>
+            </div>
+    
+            <!-- Conteúdo do Projeto -->
+            <div class="post-details">
+                <h3 class="video-title">{{ projeto.title }}</h3>
+                <p><strong>Área de Impacto:</strong> {{ projeto.impact_area }}</p>
+                <p><strong>Descrição:</strong> {{ projeto.description }}</p>
+                <p><strong>Objetivos:</strong> {{ projeto.objective }}</p>
+            </div>
+    
+            <!-- Ações de Curadoria -->
+            <form method="POST" action="{% url 'App_BRASFI:aprovar_projeto' projeto.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Aprovar</button>
+            </form>
+            
+            <form method="POST" action="{% url 'App_BRASFI:rejeitar_projeto' projeto.id %}" style="display: inline;">
+                {% csrf_token %}
+                <input type="text" name="rejection_reason" placeholder="Motivo da rejeição" required class="form-control" style="display: inline-block; width: 200px; margin-right: 5px;">
+                <button type="submit" class="btn btn-danger">Rejeitar</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="posts-view">
+        <div>Nenhum projeto pendente para curadoria.</div>
+    </div>
+    {% endif %}
+{% endblock %}

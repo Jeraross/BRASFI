@@ -89,6 +89,42 @@ function createvideo() {
     descriptionInput.addEventListener('input', validateForm);
 }
 
+function createproject() {
+    const popup = document.querySelector(".popup");
+    popup.style.display = 'block';
+    popup.querySelector('.popup-create-project').style.display = 'block';
+
+    document.querySelector('.body').setAttribute('aria-hidden', 'true');
+    document.querySelector('body').style.overflow = "hidden";
+
+    const titleInput = popup.querySelector("input[name='title']");
+    const descriptionInput = popup.querySelector("textarea[name='description']");
+    const areaSelect = popup.querySelector("select[name='impact_area']");
+    const objectiveInput = popup.querySelector("textarea[name='objective']");
+    const submitBtn = popup.querySelector('.submit-btn');
+
+    // Reset previous state
+    titleInput.value = '';
+    descriptionInput.value = '';
+    areaSelect.value = '';
+    objectiveInput.value = '';
+    submitBtn.disabled = true;
+
+    function validateForm() {
+        const hasTitle = titleInput.value.trim().length > 0;
+        const hasDesc = descriptionInput.value.trim().length > 0;
+        const hasArea = areaSelect.value.trim().length > 0;
+        const hasObjective = objectiveInput.value.trim().length > 0;
+
+        submitBtn.disabled = !(hasTitle && hasDesc && hasArea && hasObjective);
+    }
+
+    titleInput.addEventListener('input', validateForm);
+    descriptionInput.addEventListener('input', validateForm);
+    areaSelect.addEventListener('change', validateForm);
+    objectiveInput.addEventListener('input', validateForm);
+}
+
 function createquiz() {
     const popup = document.querySelector(".popup");
     popup.style.display = 'block';

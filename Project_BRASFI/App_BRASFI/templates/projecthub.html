@@ -8,6 +8,37 @@
 
 {% block body %}
     {% if user.userType == "aprendiz" %}
-        <button id="popup-btn" class="btn new-post-btn" onclick="">Criar Projeto</button>
+        <button id="popup-btn" class="btn new-post-btn" onclick="createproject()">Criar Projeto</button>
+    {% endif %}
+    {% if projetos %}
+    <div class="posts-view">
+        {% for projeto in projetos %}
+        <div class="post-card">
+            <!-- Header: Criador e Data -->
+            <div class="post-header">
+                <div class="creator-info">
+                    <div class="small-profilepic" style="background-image: url('/media/{{ projeto.user.profilePic }}');"></div>
+                    <div>
+                        <div class="username">{{ projeto.user.username }}</div>
+                        <div class="user-type">{{ projeto.user.userType }}</div>
+                    </div>
+                </div>
+                <div class="created-at">{{ projeto.created_at|date:"d M Y · H:i" }}</div>
+            </div>
+    
+            <!-- Conteúdo do Projeto -->
+            <div class="post-details">
+                <h3 class="video-title">{{ projeto.title }}</h3>
+                <p><strong>Área de Impacto:</strong> {{ projeto.impact_area }}</p>
+                <p><strong>Descrição:</strong> {{ projeto.description }}</p>
+                <p><strong>Objetivos:</strong> {{ projeto.objective }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="posts-view">
+        <div>Nenhum projeto aprovado encontrado.</div>
+    </div>
     {% endif %}
 {% endblock %}

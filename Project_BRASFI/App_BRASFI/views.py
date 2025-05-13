@@ -4,12 +4,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_POST
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from random import sample
-from .models import User, Video, Quiz, Question, Choice, QuizResult
+from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto
 from django.http import JsonResponse
 import json
 
@@ -106,9 +105,82 @@ def EditProfileView(request):
 
 @login_required
 def ProjectHubView(request):
+    projetos = Projeto.objects.filter(status="aprovado").order_by("-created_at")
     return render(request, "projecthub.html", {
-        "page": "projecthub"
+        "page": "projecthub",
+        "projetos": projetos
     })
+
+@login_required
+def CuradoriaView(request):
+    projetos = Projeto.objects.filter(status="pendente").order_by("-created_at")
+    return render(request, "curadoria.html", {
+        "page": "curadoria",
+        "projetos": projetos
+    })
+
+@login_required
+def CreateProjectView(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        impact_area = request.POST.get("impact_area")
+        objective = request.POST.get("objective")
+
+        if title and description and impact_area and objective:
+            try:
+                with transaction.atomic():
+                    Projeto.objects.create(
+                        title=title,
+                        description=description,
+                        impact_area=impact_area,
+                        objective=objective,
+                        user=request.user
+                    )
+                messages.success(request, "Projeto enviado para análise!")
+                return HttpResponseRedirect(reverse('App_BRASFI:projecthub'))
+            except IntegrityError:
+                messages.error(request, "Erro ao cadastrar o projeto.")
+                return HttpResponseRedirect(reverse('App_BRASFI:projecthub'))
+        else:
+            messages.error(request, "Todos os campos são obrigatórios.")
+            return HttpResponseRedirect(reverse('App_BRASFI:projecthub'))
+    else:
+        return HttpResponse("Method must be 'POST'")
+
+@require_POST
+@login_required
+def aprovar_projeto(request, projeto_id):
+    projeto = get_object_or_404(Projeto, id=projeto_id)
+
+    if projeto.status != "aprovado":
+        projeto.status = "aprovado"
+        projeto.rejection_reason = None  # Limpa a rejeição anterior, se houver
+        projeto.save()
+        messages.success(request, "Projeto aprovado com sucesso!")
+    else:
+        messages.info(request, "O projeto já está aprovado.")
+
+    return redirect('App_BRASFI:projecthub')
+
+
+@require_POST
+@login_required
+def rejeitar_projeto(request, projeto_id):
+    projeto = get_object_or_404(Projeto, id=projeto_id)
+
+    rejection_reason = request.POST.get("rejection_reason", "").strip()
+
+    if not rejection_reason:
+        messages.error(request, "Por favor, forneça um motivo para a rejeição.")
+        return redirect('App_BRASFI:projecthub')
+
+    projeto.status = "rejeitado"
+    projeto.rejection_reason = rejection_reason
+    projeto.save()
+    messages.success(request, "Projeto rejeitado com sucesso!")
+
+    return redirect('App_BRASFI:projecthub')
 
 @login_required
 def NetworkHubView(request):
@@ -336,9 +408,3 @@ def SubmitQuizResultView(request):
         return JsonResponse({'status': 'ok'})
 
     return JsonResponse({'status': 'error', 'message': 'Método inválido'}, status=400)
-
-@login_required
-def CuradoriaView(request):
-    return render(request, "curadoria.html", {
-        "page": "curadoria"
-    })

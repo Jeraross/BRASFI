@@ -87,3 +87,43 @@ class QuizResult(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.quiz.title}: {self.percentage}%"
+    
+class Projeto(models.Model):
+    AREA_IMPACTO_CHOICES = [
+        ("educacao", "Educação"),
+        ("meio_ambiente", "Meio Ambiente"),
+        ("saude", "Saúde"),
+        ("tecnologia", "Tecnologia"),
+        ("outros", "Outros"),
+    ]
+
+    STATUS_CHOICES = [
+        ("pendente", "Pendente"),
+        ("aprovado", "Aprovado"),
+        ("rejeitado", "Rejeitado"),
+    ]
+
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    impact_area = models.CharField(max_length=30, choices=AREA_IMPACTO_CHOICES)
+    objective = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projetos")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pendente")
+    created_at = models.DateTimeField(default=timezone.now)
+    rejection_reason = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'impact_area': self.get_impact_area_display(),
+            'objective': self.objective,
+            'status': self.get_status_display(),
+            'created_at': self.created_at.isoformat(),
+            'user': self.user.username,
+            'rejection_reason': self.rejection_reason,
+        }

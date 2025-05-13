@@ -13,6 +13,41 @@
 
         <div class="popup">
 
+            <div class="large-popup popup-create-project" style="display: none;">
+                <div>
+                    <div class="form-area">
+                        <div class="popup-header">
+                            <h2 class="popup-title">Novo Projeto</h2>
+                            <button onclick="closeCreatePostPopup()" class="popup-close-btn">✕</button>
+                        </div>
+            
+                        <form action="{% url 'App_BRASFI:createprojeto' %}" method="POST" class="newpost">
+                            {% csrf_token %}
+            
+                            <input type="text" name="title" placeholder="Título do projeto" class="form-control modern-input" required>
+            
+                            <textarea name="description" rows="4" placeholder="Descrição do projeto..." class="form-control modern-input" required></textarea>
+            
+                            <select name="impact_area" class="form-control modern-input" required>
+                                <option value="">Selecione a área de impacto</option>
+                                <option value="educacao">Educação</option>
+                                <option value="meio_ambiente">Meio Ambiente</option>
+                                <option value="saude">Saúde</option>
+                                <option value="tecnologia">Tecnologia</option>
+                                <option value="outros">Outros</option>
+                            </select>
+            
+                            <textarea name="objective" rows="3" placeholder="Objetivos do projeto" class="form-control modern-input" required></textarea>
+            
+                            <hr>
+                            <div class="form-action-btns">
+                                <input type="submit" class="btn btn-success float-right submit-btn" value="Enviar">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <div class="large-popup popup-create-post" style="display: none;">
                 <div>
                     <div class="form-area">
