@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-
 {% load static %}
 
 {% block title %}
@@ -7,10 +6,11 @@
 {% endblock %}
 
 {% block body %}
+    {# Só mostra o botão de criar para aprendizes #}
     {% if user.userType == "aprendiz" %}
         <button id="popup-btn" class="btn new-post-btn" onclick="createproject()">Criar Projeto</button>
     {% endif %}
-    
+
     {% if projetos %}
     <div class="posts-view">
         {% for projeto in projetos %}
@@ -18,7 +18,8 @@
             <!-- Header: Criador e Data -->
             <div class="post-header">
                 <div class="creator-info">
-                    <div class="small-profilepic" style="background-image: url('/media/{{ projeto.user.profilePic }}');"></div>
+                    <div class="small-profilepic"
+                         style="background-image: url('/media/{{ projeto.user.profilePic }}');"></div>
                     <div>
                         <div class="username">{{ projeto.user.username }}</div>
                         <div class="user-type">{{ projeto.user.userType }}</div>
@@ -26,34 +27,34 @@
                 </div>
                 <div class="created-at">{{ projeto.created_at|date:"d M Y · H:i" }}</div>
             </div>
-    
-            <!-- Conteúdo do Projeto -->
+
+            <!-- Conteúdo -->
             <div class="post-details">
-                <h3 class="video-title">{{ projeto.title }}</h3>
-                <p><strong>Área de Impacto:</strong> {{ projeto.impact_area }}</p>
+                <h3>{{ projeto.title }}</h3>
+                <p><strong>Área de Impacto:</strong> {{ projeto.get_impact_area_display }}</p>
                 <p><strong>Descrição:</strong> {{ projeto.description }}</p>
                 <p><strong>Objetivos:</strong> {{ projeto.objective }}</p>
             </div>
 
-            <!-- Botão de Discussões -->
-            <button onclick="toggleForum('{{ projeto.id }}')">💬 Discussões</button>
+            <!-- Toggle fórum -->
+            <button onclick="toggleForum({{ projeto.id }})">💬 Discussões</button>
             <div id="forum-{{ projeto.id }}" style="display:none; margin-top:10px;">
                 {% for comentario in projeto.comentarios.all %}
                     <div>
-                        <strong>{{ comentario.autor.username }}</strong>: {{ comentario.mensagem }} <br>
-                        <small>{{ comentario.criado_em }}</small>
+                        <strong>{{ comentario.autor.username }}</strong>: {{ comentario.mensagem }}<br>
+                        <small>{{ comentario.criado_em|date:"d M Y H:i" }}</small>
 
                         {% for resposta in comentario.respostas.all %}
                             <div style="margin-left:20px;">
-                                <strong>{{ resposta.autor.username }}</strong>: {{ resposta.mensagem }} <br>
-                                <small>{{ resposta.criado_em }}</small>
+                                <strong>{{ resposta.autor.username }}</strong>: {{ resposta.mensagem }}<br>
+                                <small>{{ resposta.criado_em|date:"d M Y H:i" }}</small>
                             </div>
                         {% endfor %}
 
-                        {% if user.is_authenticated %}
+                        {% if user.userType == "aprendiz" %}
                         <form method="post" action="{% url 'App_BRASFI:responder_comentario' comentario.id %}">
                             {% csrf_token %}
-                            <textarea name="mensagem" rows="1" placeholder="Responder..."></textarea>
+                            <textarea name="mensagem" rows="1" placeholder="Responder..." required></textarea>
                             <button type="submit">Responder</button>
                         </form>
                         {% endif %}
@@ -61,14 +62,14 @@
                     <hr>
                 {% endfor %}
 
-                {% if user.is_authenticated %}
+                {% if user.userType == "aprendiz" %}
                 <form method="post" action="{% url 'App_BRASFI:novo_comentario' projeto.id %}">
                     {% csrf_token %}
-                    <textarea name="mensagem" rows="2" placeholder="Novo comentário..."></textarea><br>
+                    <textarea name="mensagem" rows="2" placeholder="Novo comentário..." required></textarea><br>
                     <button type="submit">Publicar</button>
                 </form>
                 {% else %}
-                <p>Você precisa estar logado para comentar.</p>
+                <p>Você precisa ser aprendiz para comentar.</p>
                 {% endif %}
             </div>
         </div>
@@ -76,7 +77,18 @@
     </div>
     {% else %}
     <div class="posts-view">
-        <div>Nenhum projeto aprovado encontrado.</div>
+        <p>Nenhum projeto aprovado encontrado.</p>
     </div>
     {% endif %}
+
+    {# --- Início do script de toggle de fórum --- #}
+    <script>
+        function toggleForum(id) {
+            const forum = document.getElementById(`forum-${id}`);
+            if (!forum) return;
+            forum.style.display = forum.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+    {# --- Fim do script --- #}
+
 {% endblock %}

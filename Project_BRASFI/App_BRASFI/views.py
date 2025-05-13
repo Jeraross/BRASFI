@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Count, Avg
+from django.db.models import Count, Avg, Q
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -105,7 +105,13 @@ def EditProfileView(request):
 
 @login_required
 def ProjectHubView(request):
-    projetos = Projeto.objects.filter(status="aprovado").order_by("-created_at")
+    if request.user.userType == 'aprendiz':
+        projetos = Projeto.objects.filter(
+            Q(status="aprovado") | Q(user=request.user)
+        ).order_by("-created_at")
+    else:
+        projetos = Projeto.objects.filter(status="aprovado").order_by("-created_at")
+
     return render(request, "projecthub.html", {
         "page": "projecthub",
         "projetos": projetos
@@ -417,23 +423,23 @@ def forum_projeto(request, projeto_id):
 
 @login_required
 def novo_comentario(request, projeto_id):
-    projeto = get_object_or_404(Projeto, id=projeto_id)
-    
-    if request.method == "POST":
-        mensagem = request.POST.get('mensagem')
-        # Adicionar o novo comentário ao projeto
-        Comentario.objects.create(projeto=projeto, mensagem=mensagem, autor=request.user)
-        return HttpResponseRedirect('/projecthub')  # Redirecionar após salvar o comentário
-    
-    return render(request, 'projecthub.html', {'projeto': projeto})
+    if request.method == 'POST' and request.user.userType == 'aprendiz':
+        texto = request.POST.get('mensagem', '').strip()
+        if texto:
+            projeto = get_object_or_404(Projeto, id=projeto_id)
+            Comentario.objects.create(projeto=projeto, autor=request.user, mensagem=texto)
+        else:
+            messages.error(request, "Comentário vazio não permitido.")
+    return redirect('App_BRASFI:projecthub')
+
 
 @login_required
 def responder_comentario(request, comentario_id):
-    if request.method == 'POST':
-        comentario = get_object_or_404(Comentario, id=comentario_id)
-        Resposta.objects.create(
-            comentario=comentario,
-            autor=request.user,
-            mensagem=request.POST['mensagem']
-        )
-    return redirect('forum_projeto', projeto_id=comentario.projeto.id)
+    if request.method == 'POST' and request.user.userType == 'aprendiz':
+        texto = request.POST.get('mensagem', '').strip()
+        if texto:
+            comentario = get_object_or_404(Comentario, id=comentario_id)
+            Resposta.objects.create(comentario=comentario, autor=request.user, mensagem=texto)
+        else:
+            messages.error(request, "Resposta vazia não permitida.")
+    return redirect('App_BRASFI:projecthub')
