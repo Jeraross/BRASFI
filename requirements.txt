@@ -8,3 +8,7 @@ gunicorn
 whitenoise
 django-crispy-forms==1.9.0
 django-debug-toolbar==2.2
+python-dotenv==1.1.0
+google-generativeai==0.8.5
+
+
