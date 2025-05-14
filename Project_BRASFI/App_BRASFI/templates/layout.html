@@ -56,17 +56,14 @@
                 </div>
             </div>
 
-            <div id="popup-feedback" class="large-popup" style="display: none;">
-                <div class="form-area">
-                  <div class="popup-header">
-                    <h2 class="popup-title">Sugestões da IA</h2>
-                    <button onclick="document.getElementById('popup-feedback').style.display='none'" class="popup-close-btn">✕</button>
-                  </div>
-                  <div class="form-control" id="conteudo-feedback" style="padding: 10px; background: #f8f9fa; border-radius: 8px;">
+            <div class="popup-sugestoes" id="popup-feedback" style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, -20%); background: white; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 1000;">
+                <h3>Sugestões da IA</h3>
+                <div id="conteudo-feedback" style="margin-top: 10px;">
                     <em>Carregando sugestões...</em>
-                  </div>
                 </div>
-              </div>
+                <button onclick="document.getElementById('popup-feedback').style.display='none'" class="btn btn-secondary" style="margin-top: 15px;">Fechar</button>
+            </div>
+            
               <script>
                 function solicitarFeedback() {
                     const title = document.querySelector('input[name="title"]').value.trim();
