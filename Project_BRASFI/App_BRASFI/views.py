@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto, Comentario, Resposta
+from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto, Comentario, Resposta, Like
 from django.http import JsonResponse
 import json
 
@@ -112,9 +112,15 @@ def ProjectHubView(request):
     else:
         projetos = Projeto.objects.all().order_by("-created_at")
 
+    liked_ids = set(
+        Like.objects.filter(user=request.user)
+                    .values_list('projeto_id', flat=True)
+    )
+
     return render(request, "projecthub.html", {
         "page": "projecthub",
-        "projetos": projetos
+        "projetos": projetos,
+        "liked_projects": liked_ids 
     })
 
 @login_required
@@ -454,3 +460,39 @@ def delete_project(request, projeto_id):
     else:
         messages.error(request, "Você não tem permissão para excluir este projeto.")
     return redirect('App_BRASFI:projecthub')
+
+@login_required
+def like_projeto(request, projeto_id):
+    projeto = get_object_or_404(Projeto, id=projeto_id)
+    user = request.user
+
+    like, created = Like.objects.get_or_create(user=user, projeto=projeto)
+
+    if not created:
+        # Se o like já existia, o usuário está removendo o like
+        like.delete()
+        liked = False
+    else:
+        liked = True
+
+    total_likes = Like.objects.filter(projeto=projeto).count()
+    return JsonResponse({'liked': liked, 'total_likes': total_likes})
+
+@login_required
+def curtir_projeto(request, projeto_id):
+    projeto = get_object_or_404(Projeto, id=projeto_id)
+
+    # Alterna curtida
+    like, created = Like.objects.get_or_create(user=request.user, projeto=projeto)
+
+    if not created:
+        # Já existia, remove
+        like.delete()
+        liked = False
+    else:
+        liked = True
+
+    return JsonResponse({
+        'total_likes': projeto.like_set.count(),
+        'liked': liked
+    })

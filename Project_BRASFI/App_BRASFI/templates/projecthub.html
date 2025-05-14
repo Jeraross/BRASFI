@@ -36,6 +36,19 @@
                 <p><strong>Objetivos:</strong> {{ projeto.objective }}</p>
             </div>
 
+            <div style="margin: 10px 0;">
+                <button
+                    onclick="curtirProjeto({{ projeto.id }})"
+                    id="like-btn-{{ projeto.id }}"
+                    class="btn {% if projeto.id in liked_projects %}btn-liked{% endif %}"
+                >
+                    👍 Curtir
+                </button>
+                <span id="like-count-{{ projeto.id }}">{{ projeto.like_set.count }}</span> curtidas
+            </div>
+
+            {% if user.is_authenticated %}
+
             <!-- Toggle fórum -->
             <button onclick="toggleForum({{ projeto.id }})">💬 Discussões</button>
             <div id="forum-{{ projeto.id }}" style="display:none; margin-top:10px;">
@@ -72,6 +85,7 @@
                 <p>Você precisa ser aprendiz para comentar.</p>
                 {% endif %}
             </div>
+            {% endif %}  {# <-- FECHANDO O if projeto.user == user #}
 
             {% if user.userType == "aprendiz" and projeto.user == user %}
             <form
@@ -104,5 +118,21 @@
         }
     </script>
     {# --- Fim do script --- #}
-
+    <script>
+        function curtirProjeto(projetoId) {
+            fetch(`/projeto/${projetoId}/like/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                const likeCountSpan = document.getElementById(`like-count-${projetoId}`);
+                likeCountSpan.innerText = data.total_likes;
+            });
+        }
+</script>
 {% endblock %}
