@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count, Avg, Q
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -105,12 +108,7 @@ def EditProfileView(request):
 
 @login_required
 def ProjectHubView(request):
-    if request.user.userType == 'aprendiz':
-        projetos = Projeto.objects.filter(
-            Q(status="aprovado") | Q(user=request.user)
-        ).order_by("-created_at")
-    else:
-        projetos = Projeto.objects.all().order_by("-created_at")
+    projetos = Projeto.objects.filter(status="aprovado").order_by("-created_at")
 
     liked_ids = set(
         Like.objects.filter(user=request.user)
@@ -180,7 +178,6 @@ def aprovar_projeto(request, projeto_id):
 @login_required
 def rejeitar_projeto(request, projeto_id):
     projeto = get_object_or_404(Projeto, id=projeto_id)
-
     rejection_reason = request.POST.get("rejection_reason", "").strip()
 
     if not rejection_reason:
@@ -190,7 +187,30 @@ def rejeitar_projeto(request, projeto_id):
     projeto.status = "rejeitado"
     projeto.rejection_reason = rejection_reason
     projeto.save()
-    messages.success(request, "Projeto rejeitado com sucesso!")
+
+    # Envia o e-mail para o dono do projeto
+    try:
+        email_html = render_to_string(
+            'emails/rejeicao_projeto.html',
+            {
+                'usuario': projeto.user,
+                'projeto': projeto,
+                'motivo': rejection_reason
+            }
+        )
+
+        send_mail(
+            subject='Seu projeto foi rejeitado',
+            message='',  # Texto simples pode ser vazio
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[projeto.user.email],
+            html_message=email_html,
+            fail_silently=False
+        )
+        messages.success(request, "Projeto rejeitado com sucesso e e-mail enviado!")
+
+    except Exception as e:
+        messages.warning(request, f"Projeto rejeitado, mas houve um erro ao enviar o e-mail: {str(e)}")
 
     return redirect('App_BRASFI:projecthub')
 

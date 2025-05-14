@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Projeto Rejeitado</title>
+</head>
+<body>
+    <h2>Olá {{ usuario.first_name }},</h2>
+
+    <p>Infelizmente, seu projeto <strong>{{ projeto.title }}</strong> foi rejeitado.</p>
+
+    <p><strong>Motivo da Rejeição:</strong></p>
+    <blockquote>
+        {{ motivo }}
+    </blockquote>
+
+    <p>Atenciosamente,<br>Equipe BRASFI</p>
+</body>
+</html>
