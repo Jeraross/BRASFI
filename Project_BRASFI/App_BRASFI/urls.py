@@ -32,6 +32,7 @@ urlpatterns = [
     path('projeto/<int:projeto_id>/like/', views.like_projeto, name='like_projeto'),
     path('projeto/<int:projeto_id>/like/', views.curtir_projeto, name='curtir_projeto'),
     path('sugestoes-da-ia/', views.sugerir_desafios, name='sugerir_desafios'),
+    path("solicitar-feedback/", views.solicitar_feedback, name="solicitar_feedback"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

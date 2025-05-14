@@ -41,6 +41,9 @@
                             <button type="button" onclick="abrirSugestoesIA()" class="btn btn-info" style="margin-top: 10px;">
                                 Gerar Sugestões com IA
                             </button>
+                            <button type="button" onclick="solicitarFeedback()" class="btn btn-info" style="margin-top: 10px;">
+                                Solicitar feedback da IA
+                            </button>
             
                             <textarea name="objective" rows="3" placeholder="Objetivos do projeto" class="form-control modern-input" required></textarea>
             
@@ -52,6 +55,80 @@
                     </div>
                 </div>
             </div>
+
+            <div id="popup-feedback" class="large-popup" style="display: none;">
+                <div class="form-area">
+                  <div class="popup-header">
+                    <h2 class="popup-title">Sugestões da IA</h2>
+                    <button onclick="document.getElementById('popup-feedback').style.display='none'" class="popup-close-btn">✕</button>
+                  </div>
+                  <div class="form-control" id="conteudo-feedback" style="padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                    <em>Carregando sugestões...</em>
+                  </div>
+                </div>
+              </div>
+              <script>
+                function solicitarFeedback() {
+                    const title = document.querySelector('input[name="title"]').value.trim();
+                    const description = document.querySelector('textarea[name="description"]').value.trim();
+                    const impact_area = document.querySelector('select[name="impact_area"]').value.trim();
+                    const objective = document.querySelector('textarea[name="objective"]').value.trim();
+                
+                    if (!title || !description || !impact_area || !objective) {
+                        alert("Por favor, preencha todos os campos obrigatórios antes de solicitar feedback.");
+                        return;
+                    }
+                
+                    // Mostrar popup
+                    const popup = document.getElementById("popup-feedback");
+                    const conteudo = document.getElementById("conteudo-feedback");
+                    popup.style.display = "block";
+                    conteudo.innerHTML = "<em>Carregando sugestões...</em>";
+                
+                    fetch("/solicitar-feedback/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": getCookie("csrftoken")
+                        },
+                        body: JSON.stringify({
+                            title: title,
+                            description: description,
+                            impact_area: impact_area,
+                            objective: objective
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            conteudo.innerHTML = `<span style="color: red;">${data.error}</span>`;
+                        } else {
+                            conteudo.innerHTML = "<ul>" + data.feedback.map(item => `<li>${item}</li>`).join("") + "</ul>";
+                        }
+                    })
+                    .catch(error => {
+                        conteudo.innerHTML = `<span style="color: red;">Erro ao buscar feedback da IA.</span>`;
+                        console.error("Erro:", error);
+                    });
+                }
+                
+                // Função para obter CSRF token
+                function getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+                </script>
+                
 
             <div class="popup-sugestoes" id="popupSugestoesIA" style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, -20%); background: white; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 1000;">
                 <h3>Sugestões da IA</h3>

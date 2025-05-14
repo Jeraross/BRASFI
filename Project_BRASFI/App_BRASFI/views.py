@@ -34,7 +34,7 @@ def sugerir_desafios(request):
             if not area:
                 return JsonResponse({'error': 'Área de impacto não fornecida.'}, status=400)
 
-            prompt = f"Quais são três desafios estratégicos comuns na área de impacto '{area}' que podem inspirar projetos inovadores?"
+            prompt = f"me diga de forma objetiva três desafios estratégicos comuns na área de impacto '{area}' que podem inspirar projetos inovadores?"
 
 
             model = genai.GenerativeModel("gemini-2.0-flash-001")
@@ -48,6 +48,49 @@ def sugerir_desafios(request):
             ]
 
             return JsonResponse({'sugestoes': sugestoes})
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Método não permitido'}, status=405)
+
+@csrf_exempt
+def solicitar_feedback(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            title = data.get("title", "").strip()
+            description = data.get("description", "").strip()
+            impact_area = data.get("impact_area", "").strip()
+            objective = data.get("objective", "").strip()
+
+            # Verificação dos campos obrigatórios
+            if not all([title, description, impact_area, objective]):
+                return JsonResponse({
+                    'error': 'Por favor, preencha todos os campos obrigatórios antes de solicitar feedback.'
+                }, status=400)
+
+            # Prompt para a IA
+            prompt = (
+                f"quero uma resposta objetiva: Sou um assistente de inovação. Analise este projeto e forneça sugestões de melhoria:\n\n"
+                f"Título: {title}\n"
+                f"Descrição: {description}\n"
+                f"Área de Impacto: {impact_area}\n"
+                f"Objetivo: {objective}\n\n"
+                f"Com base nessas informações, sugira melhorias claras e construtivas para aumentar as chances de sucesso do projeto."
+            )
+
+            model = genai.GenerativeModel("gemini-2.0-flash-001")
+            response = model.generate_content(prompt)
+
+            texto = response.text.strip()
+            sugestoes = [
+                linha.strip("-•1234567890. ").strip()
+                for linha in texto.split("\n")
+                if linha.strip()
+            ]
+
+            return JsonResponse({'feedback': sugestoes})
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
