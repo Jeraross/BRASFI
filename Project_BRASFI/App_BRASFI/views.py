@@ -14,6 +14,45 @@ from django.urls import reverse
 from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto, Comentario, Resposta, Like
 from django.http import JsonResponse
 import json
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
+
+load_dotenv()
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+@csrf_exempt
+def sugerir_desafios(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            area = data.get('impact_area')
+            title = data.get('title')
+            description = data.get('description')
+
+
+            if not area:
+                return JsonResponse({'error': 'Área de impacto não fornecida.'}, status=400)
+
+            prompt = f"Quais são três desafios estratégicos comuns na área de impacto '{area}' que podem inspirar projetos inovadores?"
+
+
+            model = genai.GenerativeModel("gemini-2.0-flash-001")
+            response = model.generate_content(prompt)
+
+            texto = response.text.strip()
+            sugestoes = [
+                linha.strip("-•1234567890. ").strip()
+                for linha in texto.split("\n")
+                if linha.strip()
+            ]
+
+            return JsonResponse({'sugestoes': sugestoes})
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Método não permitido'}, status=405)
 
 
 def LandingView(request):

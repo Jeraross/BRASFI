@@ -31,6 +31,7 @@ urlpatterns = [
     path('projecthub/delete/<int:projeto_id>/',views.delete_project,name='delete_project'),
     path('projeto/<int:projeto_id>/like/', views.like_projeto, name='like_projeto'),
     path('projeto/<int:projeto_id>/like/', views.curtir_projeto, name='curtir_projeto'),
+    path('sugestoes-da-ia/', views.sugerir_desafios, name='sugerir_desafios'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

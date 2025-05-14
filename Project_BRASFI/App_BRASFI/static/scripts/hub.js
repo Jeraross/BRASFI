@@ -4,7 +4,7 @@ function toggleUserDropdown(event) {
     event.stopPropagation();
 }
 
-// Fecha o dropdown ao clicar fora
+//Fecha o dropdown ao clicar fora
 document.addEventListener('click', function () {
     const dropdown = document.getElementById('userDropdown');
     dropdown.style.display = 'none';
@@ -102,12 +102,14 @@ function createproject() {
     const areaSelect = popup.querySelector("select[name='impact_area']");
     const objectiveInput = popup.querySelector("textarea[name='objective']");
     const submitBtn = popup.querySelector('.submit-btn');
+    const sugestoesDiv = popup.querySelector('#sugestoes-ia');
 
     // Reset previous state
     titleInput.value = '';
     descriptionInput.value = '';
     areaSelect.value = '';
     objectiveInput.value = '';
+    sugestoesDiv.innerHTML = "<em>Sugestões de desafios aparecerão aqui...</em>";
     submitBtn.disabled = true;
 
     function validateForm() {
@@ -118,10 +120,61 @@ function createproject() {
 
         submitBtn.disabled = !(hasTitle && hasDesc && hasArea && hasObjective);
     }
+    async function buscarSugestoesIA() {
+        const title = titleInput.value.trim();
+        const description = descriptionInput.value.trim();
+        const area = areaSelect.value.trim();
 
-    titleInput.addEventListener('input', validateForm);
-    descriptionInput.addEventListener('input', validateForm);
-    areaSelect.addEventListener('change', validateForm);
+        if (title && description && area) {
+            sugestoesDiv.innerHTML = "<em>Carregando sugestões da IA...</em>";
+
+            try {
+                const response = await fetch("/sugestoes-da-ia/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        description: description,
+                        impact_area: area
+                    })
+                });
+
+                const data = await response.json();
+                console.log(data);
+
+                if (data.sugestoes) {
+                    sugestoesDiv.innerHTML = `
+                        <strong>Desafios sugeridos:</strong>
+                        <ul>${data.sugestoes.map(s => `<li>${s}</li>`).join('')}</ul>
+                    `;
+                } else {
+                    sugestoesDiv.innerHTML = "<em>Nenhuma sugestão disponível.</em>";
+                }
+
+            } catch (error) {
+                sugestoesDiv.innerHTML = "<em>Erro ao buscar sugestões da IA.</em>";
+                console.error(error);
+            }
+        }
+    }
+    titleInput.addEventListener('input', () => {
+        validateForm();
+        buscarSugestoesIA();
+    });
+
+    descriptionInput.addEventListener('input', () => {
+        validateForm();
+        buscarSugestoesIA();
+    });
+
+    areaSelect.addEventListener('change', () => {
+        validateForm();
+        buscarSugestoesIA();
+    });
+
     objectiveInput.addEventListener('input', validateForm);
 }
 
