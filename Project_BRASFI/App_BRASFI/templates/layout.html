@@ -38,9 +38,9 @@
                                 <option value="outros">Outros</option>
                             </select>
 
-                            <div id="sugestoes-ia" class="form-control" style="margin-top: 10px; background: #f8f9fa; padding: 10px; border-radius: 8px;">
-                                <em>Sugestões de desafios aparecerão aqui...</em>
-                              </div>
+                            <button type="button" onclick="abrirSugestoesIA()" class="btn btn-info" style="margin-top: 10px;">
+                                Gerar Sugestões com IA
+                            </button>
             
                             <textarea name="objective" rows="3" placeholder="Objetivos do projeto" class="form-control modern-input" required></textarea>
             
@@ -52,6 +52,61 @@
                     </div>
                 </div>
             </div>
+
+            <div class="popup-sugestoes" id="popupSugestoesIA" style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, -20%); background: white; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 1000;">
+                <h3>Sugestões da IA</h3>
+                <div id="sugestoesConteudo" style="margin-top: 10px;">
+                    <em>Carregando...</em>
+                </div>
+                <button onclick="fecharSugestoesIA()" class="btn btn-secondary" style="margin-top: 15px;">Fechar</button>
+            </div>
+            <script>
+                function abrirSugestoesIA() {
+                    // Mostra o popup
+                    document.getElementById("popupSugestoesIA").style.display = "block";
+                
+                    // Dados do formulário (você pode pegar os campos direto da DOM se quiser)
+                    const area = document.querySelector('select[name="impact_area"]').value;
+                    const title = document.querySelector('input[name="title"]').value;
+                    const description = document.querySelector('textarea[name="description"]').value;
+                
+                    if (!area || !title || !description) {
+                        document.getElementById("sugestoesConteudo").innerHTML = "<em>Preencha título, descrição e área antes de gerar sugestões.</em>";
+                        return;
+                    }
+                
+                    fetch("{% url 'App_BRASFI:sugerir_desafios' %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token }}",
+                        },
+                        body: JSON.stringify({
+                            impact_area: area,
+                            title: title,
+                            description: description
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.sugestoes) {
+                            const html = data.sugestoes.map(item => `<li>${item}</li>`).join("");
+                            document.getElementById("sugestoesConteudo").innerHTML = `<ul>${html}</ul>`;
+                        } else {
+                            document.getElementById("sugestoesConteudo").innerHTML = `<em>${data.error || "Erro ao gerar sugestões."}</em>`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        document.getElementById("sugestoesConteudo").innerHTML = "<em>Erro ao buscar sugestões da IA.</em>";
+                    });
+                }
+                
+                function fecharSugestoesIA() {
+                    document.getElementById("popupSugestoesIA").style.display = "none";
+                }
+                </script>
+                
 
             <div class="large-popup popup-create-post" style="display: none;">
                 <div>
