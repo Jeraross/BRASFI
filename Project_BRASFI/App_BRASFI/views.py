@@ -77,7 +77,7 @@ def solicitar_feedback(request):
                 f"Descrição: {description}\n"
                 f"Área de Impacto: {impact_area}\n"
                 f"Objetivo: {objective}\n\n"
-                f"Com base nessas informações, sugira melhorias claras e construtivas para aumentar as chances de sucesso do projeto."
+                f"de forma objetiva e curta sugira melhorias claras e construtivas para aumentar as chances de sucesso do projeto."
             )
 
             model = genai.GenerativeModel("gemini-2.0-flash-001")
