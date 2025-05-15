@@ -31,10 +31,52 @@ Hub de Network | BRASFI
             <h3>{{ topic.titulo }}</h3>
             <p><strong>Descrição:</strong> {{ topic.descricao }}</p>
         </div>
+
+        {% if user.is_authenticated %}
+            <button onclick="toggleForum({{ topic.id }})">💬 Discussões</button>
+            <div id="forum-{{ topic.id }}" style="display:none; margin-top:10px;">
+                {% for comentario in topic.comentarios.all %}
+                    <div>
+                        <strong>{{ comentario.autor.username }}</strong>: {{ comentario.mensagem }}<br>
+                        <small>{{ comentario.criado_em|date:"d M Y H:i" }}</small>
+
+                        {% for resposta in comentario.respostas.all %}
+                            <div style="margin-left:20px;">
+                                <strong>{{ resposta.autor.username }}</strong>: {{ resposta.mensagem }}<br>
+                                <small>{{ resposta.criado_em|date:"d M Y H:i" }}</small>
+                            </div>
+                        {% endfor %}
+
+                        <form method="post" action="{% url 'App_BRASFI:responder_comentario_topico' comentario.id %}">
+                            {% csrf_token %}
+                            <textarea name="mensagem" rows="1" placeholder="Responder..." required></textarea>
+                            <button type="submit">Responder</button>
+                        </form>
+                    </div>
+                    <hr>
+                {% endfor %}
+
+                <form method="post" action="{% url 'App_BRASFI:novo_comentario_topico' topic.id %}">
+                    {% csrf_token %}
+                    <textarea name="mensagem" rows="2" placeholder="Novo comentário..." required></textarea><br>
+                    <button type="submit">Publicar</button>
+                </form>
+            </div>
+        {% else %}
+            <p>Você precisa estar logado para comentar.</p>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
 {% else %}
 <p>Não há tópicos disponíveis.</p>
 {% endif %}
+<script>
+    function toggleForum(id) {
+        const forum = document.getElementById(`forum-${id}`);
+        if (!forum) return;
+        forum.style.display = forum.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+
 {% endblock %}

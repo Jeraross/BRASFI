@@ -164,6 +164,32 @@ class Resposta(models.Model):
     def __str__(self):
         return f"{self.autor.username} respondeu a {self.comentario.id}"
     
+class ComentarioTopico(models.Model):
+    topico = models.ForeignKey(
+        TopicConversa,
+        on_delete=models.CASCADE,
+        related_name="comentarios"
+    )
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    mensagem = models.TextField()
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.autor.username} comentou em {self.topico.titulo}"
+
+class RespostaTopico(models.Model):
+    comentario = models.ForeignKey(
+        ComentarioTopico,
+        on_delete=models.CASCADE,
+        related_name="respostas"
+    )
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    mensagem = models.TextField()
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.autor.username} respondeu ao comentário {self.comentario.id}"
+
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)

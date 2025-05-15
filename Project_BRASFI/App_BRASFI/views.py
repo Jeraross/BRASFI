@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto, Comentario, Resposta, Like, TopicConversa
+from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto, Comentario, Resposta, Like, TopicConversa, ComentarioTopico, RespostaTopico
 from django.http import JsonResponse
 import json
 import os
@@ -634,3 +634,25 @@ def curtir_projeto(request, projeto_id):
         'total_likes': projeto.like_set.count(),
         'liked': liked
     })
+
+@login_required
+def novo_comentario_topico(request, topico_id):
+    if request.method == 'POST':
+        texto = request.POST.get('mensagem', '').strip()
+        if texto:
+            topico = get_object_or_404(TopicConversa, id=topico_id)
+            ComentarioTopico.objects.create(topico=topico, autor=request.user, mensagem=texto)
+        else:
+            messages.error(request, "Comentário vazio não permitido.")
+    return redirect('App_BRASFI:networkhub')
+
+@login_required
+def responder_comentario_topico(request, comentario_id):
+    if request.method == 'POST':
+        texto = request.POST.get('mensagem', '').strip()
+        if texto:
+            comentario = get_object_or_404(ComentarioTopico, id=comentario_id)
+            RespostaTopico.objects.create(comentario=comentario, autor=request.user, mensagem=texto)
+        else:
+            messages.error(request, "Resposta vazia não permitida.")
+    return redirect('App_BRASFI:networkhub')
