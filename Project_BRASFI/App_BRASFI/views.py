@@ -265,6 +265,14 @@ def CreateTopicView(request):
     else:
         # Se quiser, pode retornar uma página com formulário para criar tema
         return HttpResponse("Método deve ser POST.")
+
+@login_required
+def NetworkHubView(request):
+    TopicConversas = TopicConversa.objects.all().order_by('-created_at')
+    return render(request, "networkhub.html", {
+        "page": "networkhub",
+        "TopicConversas": TopicConversas
+    })
     
 @require_POST
 @login_required
@@ -324,8 +332,10 @@ def rejeitar_projeto(request, projeto_id):
 
 @login_required
 def NetworkHubView(request):
+    TopicConversas = TopicConversa.objects.all().order_by('-created_at')
     return render(request, "networkhub.html", {
-        "page": "networkhub"
+        "page": "networkhub",
+        "TopicConversas": TopicConversas
     })
 
 @login_required

@@ -132,10 +132,19 @@ class TopicConversa(models.Model):
     titulo = models.CharField(max_length=200)
     descricao = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_ate = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.titulo
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'titulo': self.titulo,
+            'descricao': self.descricao,
+            'user': self.user.username,
+            'created_at': self.created_at.isoformat(),
+        }
 
 class Comentario(models.Model):
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, related_name="comentarios")

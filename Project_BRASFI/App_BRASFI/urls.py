@@ -34,7 +34,7 @@ urlpatterns = [
     path('sugestoes-da-ia/', views.sugerir_desafios, name='sugerir_desafios'),
     path("solicitar-feedback/", views.solicitar_feedback, name="solicitar_feedback"),
     path('networkhub/create/', views.CreateTopicView, name='createtopic'),
-
+    path('networkhub/', views.NetworkHubView, name='networkhub'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

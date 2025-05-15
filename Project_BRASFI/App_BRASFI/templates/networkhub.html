@@ -3,10 +3,38 @@
 {% load static %}
 
 {% block title %}
-    Hub de Network | BRASFI
+Hub de Network | BRASFI
 {% endblock %}
 
 {% block body %}
-    <button id="popup-btn" class="btn new-post-btn" onclick="createtopic()">Criar Topico</button>
+<button id="popup-btn" class="btn new-post-btn" onclick="createtopic()">Criar Topico</button>
+
+{% if TopicConversas %}
+<div class="posts-view">
+    {% for topic in TopicConversas %}
+    <div class="post-card">
+        <!-- Header: Criador e Data -->
+        <div class="post-header">
+            <div class="creator-info">
+                <div class="small-profilepic" style="background-image: url('/media/{{ topic.user.profilePic }}');">
+                </div>
+                <div>
+                    <div class="username">{{ topic.user.username }}</div>
+                    <div class="user-type">{{ topic.user.userType }}</div>
+                </div>
+            </div>
+            <div class="created-at">{{ topic.created_at|date:"d M Y · H:i" }}</div>
+        </div>
+
+        <!-- Conteúdo -->
+        <div class="post-details">
+            <h3>{{ topic.titulo }}</h3>
+            <p><strong>Descrição:</strong> {{ topic.descricao }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>Não há tópicos disponíveis.</p>
+{% endif %}
 {% endblock %}
-  
