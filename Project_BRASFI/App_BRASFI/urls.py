@@ -33,6 +33,8 @@ urlpatterns = [
     path('projeto/<int:projeto_id>/like/', views.curtir_projeto, name='curtir_projeto'),
     path('sugestoes-da-ia/', views.sugerir_desafios, name='sugerir_desafios'),
     path("solicitar-feedback/", views.solicitar_feedback, name="solicitar_feedback"),
+    path('networkhub/create/', views.CreateTopicView, name='createtopic'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

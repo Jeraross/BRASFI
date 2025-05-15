@@ -13,7 +13,6 @@
     <body>
 
         <div class="popup">
-
             <div class="large-popup popup-create-project" style="display: none;">
                 <div>
                     <div class="form-area">
@@ -55,6 +54,31 @@
                     </div>
                 </div>
             </div>
+
+            <div class="large-popup popup-create-topic" style="display: none;">
+                <div>
+                    <div class="form-area">
+                        <div class="popup-header">
+                            <h2 class="popup-title">Criar Tema de Conversa</h2>
+                            <button onclick="closeCreatePostPopup()" class="popup-close-btn">✕</button>
+                        </div>
+            
+                        <form action="{% url 'App_BRASFI:createtopic' %}" method="POST" class="newtema">
+                            {% csrf_token %}
+            
+                            <input type="text" name="titulo" placeholder="Título do tema" class="form-control modern-input" required>
+            
+                            <textarea name="descricao" rows="4" placeholder="Descrição do tema..." class="form-control modern-input" required></textarea>
+            
+                            <hr>
+                            <div class="form-action-btns">
+                                <input type="submit" class="btn btn-success float-right submit-btn" value="Publicar Tema">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+                
 
             <div class="popup-sugestoes" id="popup-feedback" style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, -20%); background: white; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 1000;">
                 <h3>Sugestões da IA</h3>

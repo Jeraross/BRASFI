@@ -128,6 +128,15 @@ class Projeto(models.Model):
             'rejection_reason': self.rejection_reason,
         }
 
+class TopicConversa(models.Model):
+    titulo = models.CharField(max_length=200)
+    descricao = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_ate = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.titulo
+
 class Comentario(models.Model):
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, related_name="comentarios")
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -153,4 +162,3 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ('user', 'projeto')  # Um usuário só pode dar 1 like por projeto
-

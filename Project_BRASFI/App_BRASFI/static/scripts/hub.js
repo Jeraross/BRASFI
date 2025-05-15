@@ -178,6 +178,33 @@ function createproject() {
     objectiveInput.addEventListener('input', validateForm);
 }
 
+function createtopic() {
+    const popup = document.querySelector(".popup");
+    popup.style.display = 'block';
+    popup.querySelector('.popup-create-topic').style.display = 'block';
+
+    document.querySelector('.body').setAttribute('aria-hidden', 'true');
+    document.querySelector('body').style.overflow = "hidden";
+
+    const titleInput = popup.querySelector("input[name='titulo']");
+    const descriptionInput = popup.querySelector("textarea[name='descricao']");
+    const submitBtn = popup.querySelector('.submit-btn');
+
+    // Reset previous state
+    titleInput.value = '';
+    descriptionInput.value = '';
+    submitBtn.disabled = true;
+
+    function validateForm() {
+        const hasTitle = titleInput.value.trim().length > 0;
+        const hasDesc = descriptionInput.value.trim().length > 0;
+        submitBtn.disabled = !(hasTitle && hasDesc);
+    }
+
+    titleInput.addEventListener('input', validateForm);
+    descriptionInput.addEventListener('input', validateForm);
+}
+
 function createquiz() {
     const popup = document.querySelector(".popup");
     popup.style.display = 'block';
@@ -361,3 +388,5 @@ function closeCreatePostPopup() {
     document.querySelector('.popup').style.display = 'none';
     window.location.reload(); // Recarregar a página para atualizar o conteúdo
 }
+
+

@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto, Comentario, Resposta, Like
+from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto, Comentario, Resposta, Like, TopicConversa
 from django.http import JsonResponse
 import json
 import os
@@ -240,6 +240,32 @@ def CreateProjectView(request):
     else:
         return HttpResponse("Method must be 'POST'")
 
+@login_required
+def CreateTopicView(request):
+    if request.method == "POST":
+        titulo = request.POST.get("titulo")
+        descricao = request.POST.get("descricao")
+
+        if titulo and descricao:
+            try:
+                with transaction.atomic():
+                    TopicConversa.objects.create(
+                        titulo=titulo,
+                        descricao=descricao,
+                        user=request.user
+                    )
+                messages.success(request, "Tema criado com sucesso!")
+                return redirect(reverse('App_BRASFI:networkhub'))
+            except IntegrityError:
+                messages.error(request, "Erro ao criar o tema.")
+                return redirect(reverse('App_BRASFI:networkhub'))
+        else:
+            messages.error(request, "Título e descrição são obrigatórios.")
+            return redirect(reverse('App_BRASFI:networkhub'))
+    else:
+        # Se quiser, pode retornar uma página com formulário para criar tema
+        return HttpResponse("Método deve ser POST.")
+    
 @require_POST
 @login_required
 def aprovar_projeto(request, projeto_id):
