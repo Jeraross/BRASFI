@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST
 from django.db import IntegrityError, transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto, Comentario, Resposta, Like, TopicConversa, ComentarioTopico, RespostaTopico
+from .models import User, Video, Quiz, Question, Choice, QuizResult, Projeto, Comentario, Resposta, Like, TopicConversa, ComentarioTopico, RespostaTopico, LikeTopico
 from django.http import JsonResponse
 import json
 import os
@@ -332,11 +332,18 @@ def rejeitar_projeto(request, projeto_id):
 
 @login_required
 def NetworkHubView(request):
-    TopicConversas = TopicConversa.objects.all().order_by('-created_at')
+    TopicConversas = TopicConversa.objects.annotate(like_count=Count('likes')).order_by('-created_at')
+
+    liked_topic_ids = set(
+        LikeTopico.objects.filter(user=request.user).values_list('topico_id', flat=True)
+    )
+
     return render(request, "networkhub.html", {
         "page": "networkhub",
-        "TopicConversas": TopicConversas
+        "TopicConversas": TopicConversas,
+        "liked_topics": liked_topic_ids
     })
+
 
 @login_required
 def VideosView(request):
@@ -656,3 +663,21 @@ def responder_comentario_topico(request, comentario_id):
         else:
             messages.error(request, "Resposta vazia não permitida.")
     return redirect('App_BRASFI:networkhub')
+
+@login_required
+@require_POST
+def curtir_topico(request, topico_id):
+    topico = get_object_or_404(TopicConversa, id=topico_id)
+    user = request.user
+
+    like, created = LikeTopico.objects.get_or_create(user=user, topico=topico)
+
+    if not created:
+        like.delete()
+        liked = False
+    else:
+        liked = True
+
+    total_likes = topico.likes.count()
+
+    return JsonResponse({'liked': liked, 'total_likes': total_likes})

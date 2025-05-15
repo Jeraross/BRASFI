@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-
 {% load static %}
 
 {% block title %}
@@ -30,6 +29,17 @@ Hub de Network | BRASFI
         <div class="post-details">
             <h3>{{ topic.titulo }}</h3>
             <p><strong>Descrição:</strong> {{ topic.descricao }}</p>
+        </div>
+
+        <!-- CURTIDAS -->
+        <div style="margin: 10px 0;">
+            <button
+                onclick="curtirTopico({{ topic.id }})"
+                id="like-btn-{{ topic.id }}"
+                class="btn {% if topic.id in liked_topics %}btn-liked{% endif %}">
+                👍 Curtir
+            </button>
+            <span id="like-count-{{ topic.id }}">{{ topic.likes.count }}</span> curtidas
         </div>
 
         {% if user.is_authenticated %}
@@ -71,12 +81,37 @@ Hub de Network | BRASFI
 {% else %}
 <p>Não há tópicos disponíveis.</p>
 {% endif %}
+
+<!-- SCRIPTS -->
 <script>
     function toggleForum(id) {
         const forum = document.getElementById(`forum-${id}`);
         if (!forum) return;
         forum.style.display = forum.style.display === 'none' ? 'block' : 'none';
     }
-</script>
 
+    function curtirTopico(topicoId) {
+        fetch(`/topico/${topicoId}/like/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            const likeBtn = document.getElementById(`like-btn-${topicoId}`);
+            const likeCount = document.getElementById(`like-count-${topicoId}`);
+
+            likeCount.innerText = data.total_likes;
+
+            if (data.liked) {
+                likeBtn.classList.add('btn-liked');
+            } else {
+                likeBtn.classList.remove('btn-liked');
+            }
+        });
+    }
+</script>
 {% endblock %}

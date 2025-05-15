@@ -197,3 +197,14 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ('user', 'projeto')  # Um usuário só pode dar 1 like por projeto
+    
+class LikeTopico(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    topico = models.ForeignKey(TopicConversa, on_delete=models.CASCADE, related_name="likes")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'topico')
+
+    def __str__(self):
+        return f"{self.user.username} curtiu {self.topico.titulo}"

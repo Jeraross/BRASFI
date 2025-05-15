@@ -37,6 +37,8 @@ urlpatterns = [
     path('networkhub/', views.NetworkHubView, name='networkhub'),
     path('topico/<int:topico_id>/comentario/', views.novo_comentario_topico, name='novo_comentario_topico'),
     path('topico/comentario/<int:comentario_id>/resposta/', views.responder_comentario_topico, name='responder_comentario_topico'),
+    path("topico/<int:topico_id>/like/", views.curtir_topico, name="curtir_topico"),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
