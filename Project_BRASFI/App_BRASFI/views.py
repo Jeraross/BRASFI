@@ -175,18 +175,17 @@ def EditProfileView(request):
             return HttpResponseRedirect(reverse("App_BRASFI:projecthub"))
 
         user.username = new_username
-        user.save()
 
         if profile_pic:
-            profile = getattr(user, 'profile', None)
-            if profile:
-                profile.profilePic = profile_pic
-                profile.save()
+            user.profilePic = profile_pic  # <-- Aqui está a correção
+
+        user.save()
 
         messages.success(request, 'Perfil atualizado com sucesso!')
         return HttpResponseRedirect(reverse("App_BRASFI:projecthub"))
 
     return HttpResponse("Method must be 'POST'")
+
 
 @login_required
 def ProjectHubView(request):
