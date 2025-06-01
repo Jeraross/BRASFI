@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (event.target.files[0]) {
                 label.innerText = event.target.files[0].name;
             } else {
-                label.innerHTML = '<span style="color: #6c757d;">Escolha a foto do perfil</span>';
+                label.innerHTML = '<span style="color: #f8f8f8;">Escolha a foto do perfil</span>';
             }
         });
     });

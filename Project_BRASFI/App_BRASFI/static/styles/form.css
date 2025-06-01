@@ -1,28 +1,22 @@
 .form-control:focus{
-    box-shadow: 0 0 0 0.1rem rgba(40,167,69,.25);
-    border-color: rgb(33,136,56);
+    box-shadow: 0 0 0 0.1rem rgba(72,96,28,.25);
+    border-color: rgb(72,96,28);
 }
-.btn, .btn:focus, .btn:active{
-    box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-}
+
 .btn{
     color: white;
-    background-color: #28a745 !important;
-    border-color: #28a745 !important;
+    background-color: #48601C !important;
+    border-color: #48601C !important;
     border-radius: 999px;
     width: 95%;
 }
-.btn:hover, .btn:active, .btn:focus{
-    background-color: #218838 !important;
-    border-color: #218838 !important;
-}
+
 .star{
     color: red;
 }
 
 .user-box{
-    background-color: #fff;
+    background-color: #FFFFFF;
     width: 45%;
     border-radius: 5px;
     margin-top: 10vh;
@@ -56,7 +50,7 @@
     align-items: center;
     gap: 8px;
     background-color: #f8f8f8;
-    padding: 6px 12px;
+    padding: 6px 48px;
     border-radius: 30px;
     border: 1px solid #ccc;
     cursor: pointer;
@@ -64,17 +58,17 @@
 }
 
 .radio-group input[type="radio"] {
-    accent-color: #28a745;
+    accent-color: #48601C;
 }
 
 .radio-group label:hover {
-    background-color: #e9f9f0;
-    border-color: #28a745;
+    background-color: #F7F3ED;
+    border-color: #48601C;
 }
 
 .radio-group input:checked + label {
-    background-color: #d8f5e1;
-    border-color: #28a745;
+    background-color: #F7F3ED;
+    border-color: #48601C;
 }
 
 /* --------------------- */
