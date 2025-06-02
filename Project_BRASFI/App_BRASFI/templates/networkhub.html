@@ -31,50 +31,65 @@ Hub de Network | BRASFI
             <p><strong>Descrição:</strong> {{ topic.descricao }}</p>
         </div>
 
-        <!-- CURTIDAS -->
-        <div style="margin: 10px 0;">
-            <button
-                onclick="curtirTopico({{ topic.id }})"
+        <div class="post-actions">
+            <button 
+                onclick="curtirTopico({{ topic.id }})" 
                 id="like-btn-{{ topic.id }}"
-                class="btn {% if topic.id in liked_topics %}btn-liked{% endif %}">
-                👍 Curtir
+                class="action-btn1 {% if topic.id in liked_topics %}btn-liked{% endif %}">
+                Curtir
             </button>
             <span id="like-count-{{ topic.id }}">{{ topic.likes.count }}</span> curtidas
+
+            <button onclick="toggleForum({{ topic.id }})" class="action-btn2">
+                Discussões
+            </button>
         </div>
+    </div>
 
-        {% if user.is_authenticated %}
-            <button onclick="toggleForum({{ topic.id }})">💬 Discussões</button>
-            <div id="forum-{{ topic.id }}" style="display:none; margin-top:10px;">
-                {% for comentario in topic.comentarios.all %}
-                    <div>
-                        <strong>{{ comentario.autor.username }}</strong>: {{ comentario.mensagem }}<br>
-                        <small>{{ comentario.criado_em|date:"d M Y H:i" }}</small>
+    <!-- Área de Comentários -->
+    <div id="forum-{{ topic.id }}" class="comments-section" style="display:none;">
 
-                        {% for resposta in comentario.respostas.all %}
-                            <div style="margin-left:20px;">
-                                <strong>{{ resposta.autor.username }}</strong>: {{ resposta.mensagem }}<br>
-                                <small>{{ resposta.criado_em|date:"d M Y H:i" }}</small>
-                            </div>
-                        {% endfor %}
-
-                        <form method="post" action="{% url 'App_BRASFI:responder_comentario_topico' comentario.id %}">
-                            {% csrf_token %}
-                            <textarea name="mensagem" rows="1" placeholder="Responder..." required></textarea>
-                            <button type="submit">Responder</button>
-                        </form>
-                    </div>
-                    <hr>
-                {% endfor %}
-
-                <form method="post" action="{% url 'App_BRASFI:novo_comentario_topico' topic.id %}">
-                    {% csrf_token %}
-                    <textarea name="mensagem" rows="2" placeholder="Novo comentário..." required></textarea><br>
-                    <button type="submit">Publicar</button>
-                </form>
+        <!-- Comentários Existentes -->
+        {% for comentario in topic.comentarios.all %}
+        <div class="comment">
+            <div class="comment-header">
+                <strong>{{ comentario.autor.username }}</strong>
+                <span class="comment-date">{{ comentario.criado_em|date:"d M Y H:i" }}</span>
             </div>
-        {% else %}
-            <p>Você precisa estar logado para comentar.</p>
-        {% endif %}
+            <div class="comment-body">{{ comentario.mensagem }}</div>
+
+            <!-- Respostas -->
+            {% for resposta in comentario.respostas.all %}
+            <div class="reply">
+                <div class="comment-header">
+                    <strong>{{ resposta.autor.username }}</strong>
+                    <span class="comment-date">{{ resposta.criado_em|date:"d M Y H:i" }}</span>
+                </div>
+                <div class="comment-body">{{ resposta.mensagem }}</div>
+            </div>
+            {% endfor %}
+
+            <!-- Formulário de Resposta -->
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'App_BRASFI:responder_comentario_topico' comentario.id %}" class="comment-form">
+                {% csrf_token %}
+                <div class="comment-input-group">
+                    <textarea name="mensagem" rows="1" placeholder="Responder..." required></textarea>
+                    <button type="submit" style="background-color: #48601C; font-weight: 400;">Responder</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %} 
+
+        <form method="post" action="{% url 'App_BRASFI:novo_comentario_topico' topic.id %}" class="comment-form">
+            {% csrf_token %}
+            <div class="comment-input-group">
+                <textarea name="mensagem" rows="1" placeholder="Novo comentário..." required></textarea>
+                <button type="submit" style="background-color: #48601C; font-weight: 400;">Novo comentário</button>
+            </div>
+        </form> 
+        
     </div>
     {% endfor %}
 </div>

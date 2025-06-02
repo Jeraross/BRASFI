@@ -36,56 +36,20 @@
                 <p><strong>Objetivos:</strong> {{ projeto.objective }}</p>
             </div>
 
-            <div style="margin: 10px 0;">
-                <button
-                    onclick="curtirProjeto({{ projeto.id }})"
+            <!-- Likes -->
+            <div class="post-actions">
+                <button 
+                    onclick="curtirProjeto({{ projeto.id }})" 
                     id="like-btn-{{ projeto.id }}"
-                    class="btn {% if projeto.id in liked_projects %}btn-liked{% endif %}"
-                >
-                    👍 Curtir
+                    class="action-btn1">
+                    Curtir
                 </button>
                 <span id="like-count-{{ projeto.id }}">{{ projeto.like_set.count }}</span> curtidas
+
+                <button onclick="toggleForum({{ projeto.id }})" class="action-btn2">
+                    Discussões
+                </button>
             </div>
-
-            {% if user.is_authenticated %}
-
-            <!-- Toggle fórum -->
-            <button onclick="toggleForum({{ projeto.id }})">💬 Discussões</button>
-            <div id="forum-{{ projeto.id }}" style="display:none; margin-top:10px;">
-                {% for comentario in projeto.comentarios.all %}
-                    <div>
-                        <strong>{{ comentario.autor.username }}</strong>: {{ comentario.mensagem }}<br>
-                        <small>{{ comentario.criado_em|date:"d M Y H:i" }}</small>
-
-                        {% for resposta in comentario.respostas.all %}
-                            <div style="margin-left:20px;">
-                                <strong>{{ resposta.autor.username }}</strong>: {{ resposta.mensagem }}<br>
-                                <small>{{ resposta.criado_em|date:"d M Y H:i" }}</small>
-                            </div>
-                        {% endfor %}
-
-                        {% if user.is_authenticated %}
-                        <form method="post" action="{% url 'App_BRASFI:responder_comentario' comentario.id %}">
-                            {% csrf_token %}
-                            <textarea name="mensagem" rows="1" placeholder="Responder..." required></textarea>
-                            <button type="submit">Responder</button>
-                        </form>
-                        {% endif %}
-                    </div>
-                    <hr>
-                {% endfor %}
-
-                {% if user.is_authenticated %}
-                <form method="post" action="{% url 'App_BRASFI:novo_comentario' projeto.id %}">
-                    {% csrf_token %}
-                    <textarea name="mensagem" rows="2" placeholder="Novo comentário..." required></textarea><br>
-                    <button type="submit">Publicar</button>
-                </form>
-                {% else %}
-                <p>Você precisa ser aprendiz para comentar.</p>
-                {% endif %}
-            </div>
-            {% endif %}  {# <-- FECHANDO O if projeto.user == user #}
 
             {% if user.userType == "aprendiz" and projeto.user == user %}
             <form
@@ -101,6 +65,56 @@
             </form>
             {% endif %}
         </div>
+
+        <!-- Área de Comentários -->
+        <div id="forum-{{ projeto.id }}" class="comments-section" style="display:none;">
+
+            <!-- Comentários Existentes -->
+            {% for comentario in projeto.comentarios.all %}
+            <div class="comment">
+                <div class="comment-header">
+                    <strong>{{ comentario.autor.username }}</strong>
+                    <span class="comment-date">{{ comentario.criado_em|date:"d M Y H:i" }}</span>
+                </div>
+                <div class="comment-body">{{ comentario.mensagem }}</div>
+
+                <!-- Respostas -->
+                {% for resposta in comentario.respostas.all %}
+                <div class="reply">
+                    <div class="comment-header">
+                        <strong>{{ resposta.autor.username }}</strong>
+                        <span class="comment-date">{{ resposta.criado_em|date:"d M Y H:i" }}</span>
+                    </div>
+                    <div class="comment-body">{{ resposta.mensagem }}</div>
+                </div>
+                {% endfor %}
+
+                <!-- Formulário de Resposta -->
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'App_BRASFI:responder_comentario' comentario.id %}" class="comment-form">
+                    {% csrf_token %}
+                    <div class="comment-input-group">
+                        <textarea name="mensagem" rows="1" placeholder="Responder..." required></textarea>
+                        <button type="submit" style="background-color: #48601C; font-weight: 400;">Responder</button>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <!-- Novo Comentário no Topo -->
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'App_BRASFI:novo_comentario' projeto.id %}" class="comment-form">
+                {% csrf_token %}
+                <div class="comment-input-group">
+                    <textarea name="mensagem" rows="1" placeholder="Novo comentário..." required></textarea>
+                    <button type="submit" style="background-color: #48601C; font-weight: 400;">Novo comentário</button>
+                </div>
+            </form>
+            {% else %}
+            <p class="login-alert">Você precisa ser aprendiz para comentar.</p>
+            {% endif %}
+        </div>
         {% endfor %}
     </div>
     {% else %}
@@ -109,7 +123,7 @@
     </div>
     {% endif %}
 
-    {# --- Início do script de toggle de fórum --- #}
+    
     <script>
         function toggleForum(id) {
             const forum = document.getElementById(`forum-${id}`);

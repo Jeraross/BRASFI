@@ -297,7 +297,7 @@
             
             <div class="sidenav">
                 <a href="{% url 'App_BRASFI:projecthub' %}" class="navbar-brand">
-                    <img src="{% static 'img/BRASFI_nobg.png' %}" height="50px">
+                    <img src="{% static 'img/BRASFI_nobg.png' %}" height="80px">
                 </a>
             
                 <ul class="sidenav-menu">
@@ -306,7 +306,7 @@
                             <div>Projetos</div>
                         </a>
                     </li>
-                    <li class="nav-item {% if request.path == '/networkhub' %}active{% endif %}">
+                    <li class="nav-item {% if page == 'networkhub' %}active{% endif %}">
                         <a href="{% url 'App_BRASFI:networkhub' %}" class="nav-link">
                             <div>Network</div>
                         </a>
@@ -334,7 +334,7 @@
                 <div class="user-dropdown-menu" id="userDropdown" style="display: none;">
                     <ul>
                         <li onclick="editProfile()">Editar Perfil</li>
-                        <li><a href="{% url 'App_BRASFI:logout' %}">Sair</a></li>
+                        <li><a href="{% url 'App_BRASFI:logout' %}" style="color: red;">Sair</a></li>
                     </ul>
                 </div>
 
